@@ -127,6 +127,13 @@ button[kind="primary"] p,button[kind="primaryFormSubmit"] p,.st-key-nav button[k
 .prize-box{border:2px solid #203d2b;background:#ffedb5;border-radius:13px;padding:10px 14px;margin:5px 0;box-shadow:0 2px 0 #153222;}
 .prize-label{font-size:11px;color:#66643d;font-weight:700;}.prize-value{font-family:'Jua',sans-serif!important;font-size:23px;color:#2c4129;line-height:1.3;overflow-wrap:anywhere;}.prize-state{font-size:10px;color:#6e704c;margin-top:3px;}
 @media(max-height:780px){.family-header{height:62px;background-size:180px auto}.header-copy{top:10px;font-size:23px}.header-copy span{font-size:10px;margin-top:3px}.heading{font-size:23px;margin:3px 0 5px}.panel{padding:10px}.prize-box{padding:7px 12px}.prize-value{font-size:20px}}
+
+/* Explicit card foreground: never inherit the green-page light text. */
+.panel,.panel div,.panel span,.panel p{color:#283b2e!important;-webkit-text-fill-color:#283b2e!important;}
+.panel .small{color:#5d6550!important;-webkit-text-fill-color:#5d6550!important;}
+.family-names{font-size:18px;font-weight:700;line-height:1.65;overflow-wrap:anywhere;color:#283b2e!important;}
+input,textarea,[data-baseweb="select"] input{color:#283b2e!important;-webkit-text-fill-color:#283b2e!important;caret-color:#283b2e!important;}
+input::placeholder,textarea::placeholder{color:#707565!important;-webkit-text-fill-color:#707565!important;opacity:1!important;}
 </style>""",unsafe_allow_html=True)
 def clock12(value):
  try:
@@ -192,7 +199,7 @@ if page=='설정' or not d['members']:
    if st.form_submit_button('가족 추가',type='primary',use_container_width=True):
     if n and n not in d['members']:d['members'].append(n);save()
     else:st.caption('다른 별명을 입력해주세요.')
-  panel('함께하는 가족','<div style="line-height:1.7;overflow-wrap:anywhere">'+escape(' · '.join(d['members'][:12]) or '첫 가족을 등록해주세요.')+'</div>')
+  panel('함께하는 가족','<div class="family-names">'+escape(' · '.join(d['members'][:12]) or '첫 가족을 등록해주세요.')+'</div>')
   if len(d['members'])>12:st.caption(f'외 {len(d["members"])-12}명')
  else:
   st.download_button('전체 데이터 백업',json.dumps(d,ensure_ascii=False,indent=2),'home_backup.json','application/json',use_container_width=True)
