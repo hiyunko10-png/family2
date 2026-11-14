@@ -146,6 +146,13 @@ input::placeholder,textarea::placeholder{color:#707565!important;-webkit-text-fi
 .panel .inline-reward-value{font-size:17px;font-weight:700;line-height:1.3;overflow-wrap:anywhere;}
 .panel .inline-reward-state{font-size:10px;color:#73755e!important;-webkit-text-fill-color:#73755e!important;margin-left:auto;}
 @media(max-width:380px){.header-copy{font-size:23px!important}.inline-reward{gap:6px}.panel .inline-reward-state{font-size:9px;}}
+
+/* Self-contained rounded header card; no faded image edge. */
+.family-header{height:92px!important;margin:2px 0 12px!important;border:1px solid #71866a!important;border-radius:20px!important;background-color:#245d40!important;background-size:auto 100%!important;background-position:right 10px center!important;box-shadow:0 3px 8px #102e2224!important;overflow:hidden!important;isolation:isolate;}
+.family-header::after{display:none!important;}
+.header-copy{left:18px!important;top:20px!important;font-size:26px!important;color:#fff4cf!important;}
+.header-copy span{margin-top:7px!important;font-size:11px!important;color:#dbe5ca!important;}
+@media(max-height:780px){.family-header{height:76px!important;margin-bottom:8px!important;}.header-copy{top:14px!important;font-size:24px!important}.header-copy span{margin-top:5px!important}}
 </style>""",unsafe_allow_html=True)
 def clock12(value):
  try:
