@@ -134,6 +134,18 @@ button[kind="primary"] p,button[kind="primaryFormSubmit"] p,.st-key-nav button[k
 .family-names{font-size:18px;font-weight:700;line-height:1.65;overflow-wrap:anywhere;color:#283b2e!important;}
 input,textarea,[data-baseweb="select"] input{color:#283b2e!important;-webkit-text-fill-color:#283b2e!important;caret-color:#283b2e!important;}
 input::placeholder,textarea::placeholder{color:#707565!important;-webkit-text-fill-color:#707565!important;opacity:1!important;}
+
+/* Compact unified request card and uncropped illustrated masthead. */
+.family-header{height:86px!important;background-size:auto 100%!important;background-position:right center!important;background-color:#245d40!important;border:0!important;box-shadow:none!important;border-radius:14px!important;margin-bottom:9px!important;}
+.family-header::after{content:"";position:absolute;top:0;bottom:0;right:84px;width:70px;background:linear-gradient(90deg,#245d40,transparent);pointer-events:none;}
+.header-copy{z-index:2;top:18px!important;left:5px!important;font-size:25px!important;}
+.header-copy span{font-size:11px!important;margin-top:6px!important;}
+.panel .task-title{font-size:23px!important;line-height:1.3;margin-top:6px!important;overflow-wrap:anywhere;}
+.inline-reward{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid #dcd9bf;}
+.panel .inline-reward-label{background:#f4df9c;border-radius:7px;padding:3px 8px;font-size:11px;font-weight:700;}
+.panel .inline-reward-value{font-size:17px;font-weight:700;line-height:1.3;overflow-wrap:anywhere;}
+.panel .inline-reward-state{font-size:10px;color:#73755e!important;-webkit-text-fill-color:#73755e!important;margin-left:auto;}
+@media(max-width:380px){.header-copy{font-size:23px!important}.inline-reward{gap:6px}.panel .inline-reward-state{font-size:9px;}}
 </style>""",unsafe_allow_html=True)
 def clock12(value):
  try:
@@ -270,12 +282,13 @@ elif page=='부탁':
   t=pager(list(reversed(tasks)),'task')
   if t:
    labels={'open':'참여 가능','claimed':'수행 중','submitted':'확인 기다리는 중','approved':'승인 완료','done':'이전 완료 기록'}
-   panel(t['created']+'의 부탁 · '+labels[t['status']],'<div class="task-title">'+escape(t['title'])+'</div><div class="small" style="margin-top:18px">담당: '+escape(t['owner'] or '아직 없어요')+'</div>')
    prize_text=t.get('prize') or (f"{t['reward']:,}원" if t.get('reward') else '')
+   reward_html=''
    if prize_text:
-    st.markdown('<div class="prize-box"><div class="prize-label">보상</div><div class="prize-value">'+escape(prize_text)+'</div><div class="prize-state">'+('전달 완료' if t.get('paid') else '부탁 완료 후 전달')+'</div></div>',unsafe_allow_html=True)
-    if t['status']=='approved' and t['created']==actor and not t.get('paid'):
-     if st.button('보상 전달했어요',use_container_width=True):t['paid']=True;save()
+    reward_html=('<div class="inline-reward"><span class="inline-reward-label">보상</span><span class="inline-reward-value">'+escape(prize_text)+'</span><span class="inline-reward-state">'+('전달 완료' if t.get('paid') else '완료 후 전달')+'</span></div>')
+   panel(t['created']+'의 부탁 · '+labels[t['status']],'<div class="task-title">'+escape(t['title'])+'</div><div class="small" style="margin-top:10px">담당 · '+escape(t['owner'] or '아직 없어요')+'</div>'+reward_html)
+   if prize_text and t['status']=='approved' and t['created']==actor and not t.get('paid'):
+    if st.button('보상 전달했어요',use_container_width=True):t['paid']=True;save()
    if t['status']=='open':
     if t['created']!=actor:
      if st.button('내가 할게',type='primary',use_container_width=True):t['owner']=actor;t['status']='claimed';save()
