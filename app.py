@@ -29,7 +29,7 @@ from pathlib import Path
 
 import streamlit as st
 
-st.set_page_config(page_title="우리집 | 함께 챙기는 하루", page_icon="🌿", layout="wide")
+st.set_page_config(page_title="우리집 | 함께 챙기는 하루", page_icon="🌿", layout="centered", initial_sidebar_state="collapsed")
 KST = timezone(timedelta(hours=9))
 TODAY = datetime.now(KST).date()
 MEALS = ["아직 몰라요", "먹어요", "안 먹어요"]
@@ -40,80 +40,117 @@ PALETTE = ["#e7eee4", "#faead9", "#e6edf5", "#f1e5eb", "#ede9d9"]
 CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
-:root {color-scheme:light;--forest:#254c3b;--paper:#f7f8f3;--ink:#263c32;}
-html,body,.stApp {font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;color:var(--ink);background:var(--paper);}
-[data-testid="stAppViewContainer"],[data-testid="stHeader"] {background:var(--paper);}
-[data-testid="stHeader"] {display:none;}
-.block-container {max-width:1200px;padding:2.2rem 2.5rem 3rem;}
-[data-testid="stMainBlockContainer"] {padding-top:2.2rem;}
-h1,h2,h3,p,label {word-break:keep-all;letter-spacing:-.025em;}
-p {line-height:1.75;}
-h1 {font-family:'Gowun Batang',serif!important;font-size:2.55rem!important;font-weight:700!important;line-height:1.4!important;padding:0!important;color:var(--ink)!important;}
-h2 {font-size:1.2rem!important;font-weight:700!important;padding:.35rem 0!important;color:var(--ink)!important;}
-h3 {font-size:1.05rem!important;color:var(--ink)!important;}
-[data-testid="stCaptionContainer"] p {color:#617268!important;}
-[data-testid="stVerticalBlock"] {gap:.8rem;}
-[data-testid="stButton"] button,[data-testid="stDownloadButton"] button,[data-testid="stFormSubmitButton"] button {border-radius:10px;min-height:43px;font-weight:600;border-color:#d5dfd4;background:#fff;color:#294d3b;box-shadow:none;}
-[data-testid="stButton"] button:hover {border-color:#315c43;background:#edf2e9;color:#254c3b;}
-button[kind="primary"],button[kind="primaryFormSubmit"] {background:#2e5943!important;border-color:#2e5943!important;color:white!important;}
-button:focus-visible,input:focus-visible,textarea:focus-visible {outline:3px solid #ba742d!important;outline-offset:3px;}
-[data-testid="stForm"] {border:1px solid #dce4d9;border-radius:15px;background:#fff;padding:1.15rem;}
-[data-baseweb="input"],[data-baseweb="select"]>div,[data-baseweb="textarea"] {background:#fafbf8!important;border-radius:9px!important;}
-input,textarea {color:#263c32!important;}
-[data-testid="stTextInput"] label p,[data-testid="stSelectbox"] label p,[data-testid="stRadio"] label p {color:#344f3f;}
-[data-testid="stExpander"] {background:#fff;border-color:#dce4d9;border-radius:12px;}
-.masthead {display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #dce3d8;padding-bottom:19px;margin-bottom:13px;}
-.brand {display:flex;align-items:center;gap:11px;font-size:24px;font-weight:800;letter-spacing:-1.1px;}
-.brand-mark {width:36px;height:36px;background:#2e5943;border-radius:12px;display:grid;place-items:center;color:#fff;font-size:21px;}
-.brand-note {font-size:12px;color:#66776a;letter-spacing:0;font-weight:400;margin-left:9px;}
-.dateline {font-size:13px;color:#617268;}
-.st-key-navigation {border-bottom:1px solid #dce3d8;padding-bottom:14px;margin-bottom:14px;}
-.st-key-navigation [data-testid="stHorizontalBlock"] {gap:9px;}
-.st-key-navigation button {border:0!important;background:transparent!important;}
-.st-key-navigation button[kind="primary"] {background:#e4ecdf!important;color:#264d38!important;}
-.greeting {margin:13px 0 4px;}
-.intro {color:#617268;font-size:14px;margin:10px 0 20px;}
-.hero {position:relative;overflow:hidden;border-radius:21px;background:#e6eedf;min-height:224px;padding:28px 31px;margin-bottom:7px;}
-.hero-label {font-size:13px;font-weight:600;color:#506547;}
-.hero-title {font-family:'Gowun Batang',serif;font-size:29px;font-weight:700;line-height:1.55;margin:12px 0 8px;max-width:65%;color:#244733;}
-.hero-note {font-size:12px;color:#4c6348;max-width:65%;}
-.hero svg {position:absolute;width:210px;right:13px;bottom:2px;}
-.sectionline {display:flex;align-items:center;justify-content:space-between;margin:20px 0 11px;}
-.sectionline strong {font-size:17px;letter-spacing:-.5px;}
-.sectionline span {font-size:12px;color:#68786c;}
-.person {display:flex;gap:13px;align-items:center;border-bottom:1px solid #e7ece3;padding:14px 3px;}
-.avatar {display:grid;place-items:center;width:41px;height:41px;border-radius:50%;font-size:15px;font-weight:700;flex-shrink:0;}
-.person-main {flex:1;min-width:0;overflow-wrap:anywhere;font-size:14px;font-weight:600;}
-.person-main small {display:block;font-size:12px;font-weight:400;color:#69796e;margin-top:4px;}
-.pill {display:inline-block;border-radius:6px;padding:4px 8px;font-size:11px;background:#e8efdf;color:#3c5c30;white-space:nowrap;font-weight:600;}
-.pill.neutral {background:#edf0eb;color:#5a6a5e;}
-.pill.amber {background:#f8ecd8;color:#795223;}
-.note-card {background:#fff;border:1px solid #e0e6db;border-radius:13px;padding:18px 20px;margin-bottom:10px;}
-.note-card .title {font-size:16px;font-weight:700;line-height:1.6;overflow-wrap:anywhere;}
-.note-card .meta {font-size:12px;color:#647567;margin-top:7px;line-height:1.8;}
-.note-card .reward {border-top:1px dashed #dbe2d4;margin-top:14px;padding-top:12px;font-size:13px;color:#73562b;}
-.empty {padding:27px 20px;border:1px dashed #cedbc9;border-radius:13px;text-align:center;color:#687b69;font-size:13px;line-height:1.9;background:#f2f5ed;}
-.footer {border-top:1px solid #dce3d8;margin-top:34px;padding-top:15px;color:#738071;font-size:11px;display:flex;justify-content:space-between;gap:12px;}
-.st-key-calendar {padding:17px;border:1px solid #dce4d7;border-radius:15px;background:#fff;}
-.st-key-calendar [data-testid="stHorizontalBlock"] {flex-wrap:nowrap!important;gap:4px!important;}
-.st-key-calendar [data-testid="stColumn"] {min-width:0!important;width:0!important;flex:1 1 0!important;}
-.st-key-calendar button {padding:0!important;border:0!important;min-height:44px!important;}
-.st-key-calendar button:disabled {visibility:hidden;}
-.weekday {text-align:center;color:#68786b;font-size:12px;padding:10px 0;}
-.calendar-title {font-size:19px;font-weight:700;text-align:center;line-height:43px;}
-.st-key-monthnav [data-testid="stHorizontalBlock"] {flex-wrap:nowrap!important;}
-.st-key-monthnav [data-testid="stColumn"] {min-width:0!important;}
-.st-key-monthnav button {padding:0 4px!important;}
-.st-key-monthnav button p {font-size:12px!important;white-space:nowrap;}
+:root {color-scheme:light!important;--text-color:#263c32;--background-color:#f7f8f3;--secondary-background-color:#fff;--primary-color:#2e5943;}
+html,body,.stApp {font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif!important;background:#f7f8f3!important;color:#263c32!important;}
+[data-testid="stAppViewContainer"] {background:#f7f8f3!important;}
+[data-testid="stHeader"],[data-testid="stToolbar"],footer {display:none!important;}
+/* Only the page content is compacted; never hide overflowing form fields or the keyboard. */
+.block-container,[data-testid="stMainBlockContainer"] {max-width:470px!important;padding:12px 16px calc(77px + env(safe-area-inset-bottom))!important;}
+[data-testid="stVerticalBlock"] {gap:7px!important;}
+[data-testid="stHorizontalBlock"] {gap:8px!important;flex-wrap:nowrap!important;}
+[data-testid="stColumn"] {min-width:0!important;}
+h1,h2,h3,p,label {word-break:keep-all;}
+h1 {font-family:'Gowun Batang',serif!important;font-size:23px!important;line-height:1.5!important;padding:2px 0 4px!important;font-weight:700!important;color:#263c32!important;}
+h2,h3 {font-size:17px!important;color:#263c32!important;padding:2px 0!important;}
+p {font-size:13px;line-height:1.7;}
+[data-testid="stMarkdownContainer"],[data-testid="stWidgetLabel"],label {color:#263c32!important;}
+[data-testid="stWidgetLabel"] p {font-size:12px!important;color:#344f3f!important;}
+[data-testid="stCaptionContainer"] p {font-size:11px!important;line-height:1.6!important;color:#586d5e!important;}
 button {touch-action:manipulation;}
-@media(max-width:700px) {
- .block-container {padding:1.2rem 1.05rem 2rem;}[data-testid="stMainBlockContainer"] {padding-top:1.2rem;}
- .brand-note {display:none;}.dateline {font-size:11px;}.brand {font-size:22px;}
- h1 {font-size:2rem!important;}.hero {padding:23px;min-height:210px;}.hero-title {font-size:25px;max-width:67%;}.hero svg {width:155px;right:-9px;}.hero-note {max-width:62%;}
- .st-key-navigation [data-testid="stHorizontalBlock"] {flex-wrap:nowrap!important;gap:3px!important;}
- .st-key-navigation [data-testid="stColumn"] {min-width:0!important;width:0!important;flex:1 1 0!important;}
- .st-key-navigation button {padding:0 3px!important;}.st-key-navigation button p {font-size:13px;white-space:nowrap;}
- .footer {font-size:10px;}.st-key-calendar {padding:10px;}
+[data-testid="stButton"] button,[data-testid="stDownloadButton"] button,[data-testid="stFormSubmitButton"] button {border:1px solid #ccd9c9!important;border-radius:10px!important;min-height:40px!important;background:#fff!important;color:#294d3b!important;box-shadow:none!important;padding:5px 9px!important;}
+button p,button span {color:inherit!important;-webkit-text-fill-color:currentColor!important;font-size:13px!important;}
+button[kind="primary"],button[kind="primaryFormSubmit"] {background:#2e5943!important;border-color:#2e5943!important;color:#fff!important;}
+button[kind="primary"] *,button[kind="primaryFormSubmit"] * {color:#fff!important;-webkit-text-fill-color:#fff!important;}
+button:disabled {opacity:.5;}
+button:focus-visible,input:focus-visible,textarea:focus-visible {outline:3px solid #b57a35!important;outline-offset:2px;}
+[data-testid="stForm"] {border:1px solid #dce4d9!important;border-radius:14px!important;background:#fff!important;padding:12px!important;}
+/* Override foreground AND background, including inherited WebKit text fills and portals. */
+input,textarea,[contenteditable="true"] {background:#fff!important;color:#243b30!important;-webkit-text-fill-color:#243b30!important;caret-color:#243b30!important;opacity:1!important;font-size:16px!important;}
+input::placeholder,textarea::placeholder {color:#6b786f!important;-webkit-text-fill-color:#6b786f!important;opacity:1!important;}
+input::selection,textarea::selection {background:#d7e9cb!important;color:#183c29!important;-webkit-text-fill-color:#183c29!important;}
+[data-baseweb="input"],[data-baseweb="base-input"],[data-baseweb="textarea"],[data-baseweb="select"]>div {background:#fff!important;border-color:#c7d5c5!important;color:#243b30!important;border-radius:9px!important;}
+[data-baseweb="select"] div,[data-baseweb="select"] span {background:#fff!important;color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
+[data-baseweb="select"] svg {fill:#385641!important;color:#385641!important;}
+/* Streamlit 1.67+ uses React Aria; older 1.x uses BaseWeb above. */
+[data-testid="stSelectbox"] [role="group"] {background:#fff!important;color:#243b30!important;border-color:#c7d5c5!important;}
+[data-testid="stSelectbox"] button {background:#fff!important;color:#385641!important;border:0!important;}
+[data-testid="stSelectbox"] button svg {color:#385641!important;fill:#385641!important;}
+[data-testid="stSelectbox"] [role="group"][data-focus-within] {border-color:#2e5943!important;}
+[data-testid="stTextInput"] button {background:#fff!important;color:#385641!important;}
+[data-testid="stDateInput"] [role="group"] {background:#fff!important;color:#243b30!important;}
+[data-testid="stDateInputField"],[data-testid="stDateInputField"] *,[data-testid="stDateInputCalendarButton"] {background:#fff!important;color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
+[data-testid="stDateInputCalendar"],[data-testid="stDateInputCalendar"] * {background-color:#fff!important;color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
+[data-testid="stDateInputCalendar"] [aria-selected="true"],[data-testid="stDateInputCalendar"] [data-selected="true"], [data-testid="stDateInputCalendar"] [aria-selected="true"] * {background-color:#dcebcf!important;color:#1d402a!important;}
+[role="spinbutton"]:focus-visible {outline:2px solid #2e5943!important;outline-offset:1px;}
+[data-baseweb="popover"],[data-baseweb="menu"],[role="listbox"],[role="option"],[data-baseweb="calendar"] {background:#fff!important;color:#243b30!important;color-scheme:light!important;}
+[data-baseweb="popover"] *,[data-baseweb="menu"] *,[role="listbox"] *,[role="option"] * {color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
+[role="option"][aria-selected="true"],[role="option"]:hover,[data-baseweb="menu"] li:hover {background:#e1edda!important;color:#183c29!important;}
+[data-testid="stRadio"] label p,[data-testid="stCheckbox"] label p {color:#263c32!important;-webkit-text-fill-color:#263c32!important;font-size:12px!important;}
+[data-testid="stRadioOption"] > div > div:first-child {background:#fff!important;border-color:#739076!important;}
+[data-testid="stRadioOption"][data-selected="true"] > div > div:first-child {background:#2e5943!important;border-color:#2e5943!important;}
+[data-testid="stRadioOption"][data-selected="true"] > div > div:first-child > div {background:#fff!important;}
+[data-testid="stCheckbox"] label > div:first-of-type {background:#fff!important;border:1px solid #739076!important;}
+[data-testid="stCheckbox"] label:has(input:checked) > div:first-of-type {background:#2e5943!important;border-color:#2e5943!important;}
+[data-testid="stCheckbox"] label:has(input:checked) svg {color:#fff!important;fill:#fff!important;}
+[data-testid="stToast"] {background:#fff!important;color:#263c32!important;border:1px solid #c7d5c5!important;}
+[data-testid="stToast"] * {color:#263c32!important;-webkit-text-fill-color:#263c32!important;}
+[data-testid="stFileUploaderDropzone"] {background:#fff!important;color:#263c32!important;padding:10px!important;}
+[data-testid="stFileUploaderDropzone"] * {color:#263c32!important;}
+[data-testid="stFileChip"],[data-testid="stFileUploaderFile"] {background:#eaf1e4!important;border:1px solid #cfddc8!important;}
+[data-testid="stFileChip"] *,[data-testid="stFileUploaderFile"] * {color:#263c32!important;-webkit-text-fill-color:#263c32!important;}
+[data-testid="stFileUploader"] button {background:#fff!important;color:#385641!important;}
+[data-testid="InputInstructions"],[data-testid="stInputInstructions"] {display:none!important;}
+[data-testid="stAlert"] {padding:8px 10px!important;border-radius:10px;background:#fff2d9!important;color:#594522!important;}
+[data-testid="stAlert"] * {color:#594522!important;-webkit-text-fill-color:#594522!important;}
+[data-testid="stAlert"] p {font-size:12px!important;}
+.masthead {display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #dce3d8;padding-bottom:9px;margin-bottom:2px;}
+.brand {display:flex;align-items:center;gap:8px;font-size:21px;font-weight:800;}
+.brand-mark {width:29px;height:29px;background:#2e5943;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:20px;}
+.dateline {font-size:11px;color:#586d5e;}
+.st-key-navigation {position:fixed!important;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,470px)!important;z-index:100;background:#f7f8f3!important;border-top:1px solid #d3decd;padding:9px 12px calc(9px + env(safe-area-inset-bottom));}
+.st-key-navigation [data-testid="stColumn"] {width:0!important;flex:1 1 0!important;}
+.st-key-navigation button {border:0!important;background:transparent!important;}
+.st-key-navigation button[kind="primary"] {background:#e1ebd9!important;color:#254c36!important;}
+.st-key-navigation button[kind="primary"] * {color:#254c36!important;-webkit-text-fill-color:#254c36!important;}
+.st-key-profile [data-testid="stWidgetLabel"] {display:none;}
+.st-key-profile [data-testid="stColumn"]:first-child {flex:1.2 1 0!important;}
+.st-key-profile [data-testid="stColumn"]:last-child {flex:1 1 0!important;}
+.profile-label {line-height:40px;font-size:12px;color:#586d5e;}
+.hero {position:relative;overflow:hidden;border-radius:16px;background:#e6eedf;min-height:99px;padding:13px 16px;}
+.hero-label {font-size:11px;color:#4c6348;}
+.hero-title {font-family:'Gowun Batang',serif;font-size:23px;font-weight:700;line-height:1.5;margin:3px 0;color:#244733;max-width:75%;}
+.hero-note {font-size:11px;color:#4c6348;max-width:73%;}
+.hero svg {position:absolute;width:106px;right:2px;bottom:-1px;}
+.sectionline {display:flex;align-items:center;justify-content:space-between;margin:4px 0;}
+.sectionline strong {font-size:15px;}.sectionline span {font-size:11px;color:#586d5e;}
+.person {display:flex;gap:11px;align-items:center;padding:15px;background:#fff;border:1px solid #dce4d9;border-radius:13px;}
+.avatar {display:grid;place-items:center;width:38px;height:38px;border-radius:50%;font-size:15px;font-weight:700;flex-shrink:0;}
+.person-main {flex:1;min-width:0;overflow-wrap:anywhere;font-size:14px;font-weight:600;}
+.person-main small {display:block;font-size:12px;font-weight:400;color:#586d5e;margin-top:3px;}
+.pill {display:inline-block;border-radius:6px;padding:3px 7px;font-size:11px;background:#e8efdf;color:#3c5c30;font-weight:600;}
+.pill.neutral {background:#edf0eb;color:#506453;}.pill.amber {background:#f8ecd8;color:#795223;}
+.note-card {background:#fff;border:1px solid #dce4d9;border-radius:14px;padding:14px 16px;}
+.note-card .title {font-size:17px;font-weight:700;line-height:1.55;overflow-wrap:anywhere;}
+.note-card .meta {font-size:12px;color:#586d5e;margin-top:6px;line-height:1.6;overflow-wrap:anywhere;}
+.note-card .reward {border-top:1px dashed #dbe2d4;margin-top:10px;padding-top:9px;font-size:13px;color:#73562b;overflow-wrap:anywhere;}
+.empty {padding:22px 15px;border:1px dashed #c5d5bf;border-radius:13px;color:#506651;text-align:center;font-size:13px;line-height:1.8;background:#f0f4e9;}
+.pager-count {text-align:center;font-size:12px;color:#586d5e;line-height:40px;}
+.st-key-calendar {padding:8px;border:1px solid #dce4d7;border-radius:14px;background:#fff;}
+.st-key-calendar [data-testid="stVerticalBlock"] {gap:2px!important;}
+.st-key-calendar [data-testid="stHorizontalBlock"] {gap:3px!important;}
+.st-key-calendar [data-testid="stColumn"] {width:0!important;flex:1 1 0!important;}
+.st-key-calendar button {padding:0!important;border:0!important;min-height:34px!important;height:34px!important;}
+.st-key-calendar button:disabled {visibility:hidden;}
+.weekday {text-align:center;color:#586d5e;font-size:11px;line-height:22px;}
+.calendar-title {font-size:17px;font-weight:700;text-align:center;line-height:40px;}
+.st-key-monthnav button {padding:0 4px!important;}.st-key-monthnav button p {font-size:12px!important;white-space:nowrap;}
+/* Small-height phones still retain a safe scrolling fallback for keyboards / zoom. */
+@media(max-height:700px) {
+ .block-container,[data-testid="stMainBlockContainer"] {padding-top:8px!important;}
+ [data-testid="stVerticalBlock"] {gap:5px!important;}
+ h1 {font-size:21px!important;}.hero {min-height:84px;padding:10px 14px;}.hero-title {font-size:21px;}
+ .hero svg {width:90px;}.st-key-calendar button {min-height:30px!important;height:30px!important;}
+ [data-testid="stForm"] {padding:10px!important;}
 }
 @media(prefers-reduced-motion:reduce) {* {transition:none!important;animation:none!important;}}
 </style>
@@ -338,26 +375,35 @@ def card(title: str, meta: str, badge="", reward=""):
 def go(page: str):
     st.session_state.page = page
     st.session_state.pop("editor", None)
+    st.session_state.pop("event_draft_id", None)
     st.rerun()
 
 
+def pager(items, key):
+    """한 번에 하나만 보여 주므로 가족과 기록이 늘어도 화면은 길어지지 않아요."""
+    if not items:
+        return None
+    position = min(st.session_state.get(key, 0), len(items) - 1)
+    if len(items) > 1:
+        a, b, c = st.columns([1, 2, 1])
+        if a.button("이전", key=key + "_prev", disabled=position == 0, use_container_width=True):
+            st.session_state[key] = position - 1
+            st.rerun()
+        b.markdown(f'<div class="pager-count">{position + 1} / {len(items)}</div>', unsafe_allow_html=True)
+        if c.button("다음", key=key + "_next", disabled=position == len(items) - 1, use_container_width=True):
+            st.session_state[key] = position + 1
+            st.rerun()
+    return items[position]
+
+
 def today_page(actor: str):
-    html(f'<div class="greeting"><h1>오늘도, 함께라서 좋아요.</h1></div><div class="intro">{escape(actor)}님, 우리 가족의 하루를 가볍게 챙겨보세요.</div>')
     entries = DATA["days"].get(TODAY.isoformat(), {})
     count = sum(entries.get(n, {}).get("meal") == "먹어요" for n in DATA["members"])
     pending = sum(entries.get(n, {}).get("meal", "아직 몰라요") == "아직 몰라요" for n in DATA["members"])
-    left, right = st.columns([1.6, 1], gap="large")
-    with left:
-        note = f'{pending}명의 저녁 소식을 기다리고 있어요.' if pending else '모두의 저녁 소식이 도착했어요.'
-        html(f'<div class="hero"><div class="hero-label">오늘 저녁, 우리집 식탁</div><div class="hero-title">{count}명이 함께<br>저녁을 먹어요.</div><div class="hero-note">{note}</div>' + ILLUSTRATION + '</div>')
-        section("가족들의 오늘", f"함께하는 {len(DATA['members'])}명")
-        for i, n in enumerate(DATA["members"]):
-            e = entries.get(n, {})
-            meal = e.get("meal", "아직 몰라요")
-            state, style = ("함께 먹어요", "") if meal == "먹어요" else (("밖에서 먹어요", "neutral") if meal == "안 먹어요" else ("아직 미정", "amber"))
-            me = '<span style="font-size:10px;color:#69796e">나</span>' if n == actor else ""
-            html(f'<div class="person"><div class="avatar" style="background:{PALETTE[i % len(PALETTE)]}">{escape(n[:1])}</div><div class="person-main">{escape(n)} {me}<small>귀가　{escape(clock(e.get("arrival", "미정")))}</small></div><span class="pill {style}">{state}</span></div>')
-        section("내 저녁 소식")
+    note = f'{pending}명은 아직 미정이에요.' if pending else '모두의 저녁 소식이 도착했어요.'
+    html(f'<div class="hero"><div class="hero-label">오늘 저녁, 우리집 식탁</div><div class="hero-title">{count}명이 함께 먹어요.</div><div class="hero-note">{note}</div>' + ILLUSTRATION + '</div>')
+    mode = st.radio("오늘 보기", ["내 소식", "가족 소식", "다가오는 일정"], horizontal=True, label_visibility="collapsed")
+    if mode == "내 소식":
         current = entries.get(actor, {})
         with st.form(f"meal_{actor}_{TODAY}"):
             meal = st.radio("오늘 저녁은요?", MEALS, index=MEALS.index(current.get("meal", MEALS[0])), horizontal=True)
@@ -366,24 +412,27 @@ def today_page(actor: str):
             if st.form_submit_button("내 소식 저장", type="primary", use_container_width=True):
                 DATA["days"].setdefault(TODAY.isoformat(), {})[actor] = {"meal": meal, "arrival": arrival}
                 save("가족에게 내 저녁 소식을 전했어요.")
-    with right:
-        section("다가오는 가족 일정", "오늘부터")
+        st.caption("가족의 소식은 ‘가족 소식’에서 넘겨 볼 수 있어요.")
+    elif mode == "가족 소식":
+        n = pager(DATA["members"], "today_family")
+        e = entries.get(n, {})
+        meal = e.get("meal", "아직 몰라요")
+        i = DATA["members"].index(n)
+        html(f'<div class="person"><div class="avatar" style="background:{PALETTE[i % 5]}">{escape(n[:1])}</div><div class="person-main">{escape(n)}<small>귀가　{escape(clock(e.get("arrival", "미정")))}</small></div><span class="pill">{escape(meal)}</span></div>')
+        active = sum(t["status"] != "approved" for t in DATA["tasks"])
+        st.caption(f"가족의 작은 부탁 {active}개가 진행 중이에요.")
+        if st.button("부탁 보러 가기", use_container_width=True):
+            go("부탁")
+    else:
         events = sorted([e for e in DATA["events"] if e["date"] >= TODAY.isoformat()], key=lambda e: (e["date"], e["time"]))
-        for e in events[:3]:
+        e = pager(events, "upcoming_event")
+        if e:
             when = date.fromisoformat(e["date"])
             card(e["title"], f'{e["who"]} · {e["time"] or "시간·장소 미정"}', "오늘" if when == TODAY else f"{when.month}월 {when.day}일 ({WEEKDAYS[when.weekday()]})")
-        if not events:
+        else:
             empty("함께할 다음 일정을 등록해 보세요.")
         if st.button("가족 캘린더 보기", use_container_width=True):
             go("일정")
-        active = [t for t in DATA["tasks"] if t["status"] != "approved"]
-        section("가족의 작은 부탁", f"진행 중 {len(active)}개")
-        for t in list(reversed(active))[:2]:
-            card(t["title"], f'{t["created"]}의 부탁 · {t["owner"] or "아직 담당이 없어요"}', reward=t["prize"] or (f'{t["reward"]:,}원' if t["reward"] else ""))
-        if not active:
-            empty("부탁이 없어요. 작은 일도 함께 나눠요.")
-        if st.button("부탁 나누러 가기", use_container_width=True):
-            go("부탁")
 
 
 def task_editor(actor: str, original=None):
@@ -408,7 +457,6 @@ def task_editor(actor: str, original=None):
 
 def tasks_page(actor: str):
     st.title("작은 부탁, 같이 해요.")
-    st.caption("혼자 하기 번거로운 일도 함께 나누면 가벼워져요.")
     editor = st.session_state.get("editor", "")
     original = next((t for t in DATA["tasks"] if t["id"] == editor and t["created"] == actor and t["status"] == "open"), None)
     if editor == "new_task" or original:
@@ -417,17 +465,15 @@ def tasks_page(actor: str):
     if st.button("＋ 새로운 부탁", type="primary"):
         st.session_state.editor = "new_task"
         st.rerun()
-    category = st.radio("부탁 목록", ["진행 중", "확인 대기", "완료"], horizontal=True)
+    category = st.radio("부탁 목록", ["진행 중", "확인 대기", "완료"], horizontal=True, label_visibility="collapsed")
     only_mine = st.checkbox("내가 부탁하거나 맡은 일만 보기")
     tasks = [t for t in reversed(DATA["tasks"]) if (t["status"] in ("open", "claimed") if category == "진행 중" else t["status"] == "submitted" if category == "확인 대기" else t["status"] == "approved") and (not only_mine or actor in (t["owner"], t["created"]))]
     if not tasks:
         empty("여기는 아직 조용해요. 새로운 부탁을 남겨보세요.")
-    if len(tasks) > 12:
-        pages = (len(tasks) + 11) // 12
-        page_no = st.selectbox("목록 페이지", list(range(1, pages + 1)), format_func=lambda n: f"{n} / {pages}쪽", key=f"task_page_{category}_{actor}_{only_mine}")
-        tasks = tasks[(page_no - 1) * 12:page_no * 12]
-    for t in tasks:
-        with st.container(border=True):
+    selected = pager(tasks, f"task_page_{category}_{actor}_{only_mine}")
+    if selected:
+        t = selected
+        with st.container():
             prize = t["prize"] or (f'{t["reward"]:,}원' if t["reward"] else "")
             card(t["title"], f'{t["created"]}의 부탁 · 담당: {t["owner"] or "아직 없어요"}', STATUSES[t["status"]], prize)
             if t["status"] == "open":
@@ -473,38 +519,64 @@ def tasks_page(actor: str):
 
 
 def event_editor(chosen: date, original=None):
-    with st.form("event_editor"):
-        title = st.text_input("일정 이름 *", value=original["title"] if original else "", max_chars=70, placeholder="예: 함께하는 주말 피크닉")
-        when = st.date_input("날짜", value=date.fromisoformat(original["date"]) if original else chosen)
-        people = ["가족 모두"] + DATA["members"]
-        who = st.selectbox("함께하는 가족", people, index=people.index(original["who"]) if original else 0)
-        place = st.text_input("시간 · 장소", value=original["time"] if original else "", max_chars=100, placeholder="예: 오전 11시 · 동네 공원")
-        prep = st.text_area("준비물 (한 줄에 하나씩)", value="\n".join(i["text"] for i in original["items"]) if original else "", max_chars=2000, placeholder="예: 돗자리\n도시락")
-        if st.form_submit_button("일정 수정" if original else "일정 등록", type="primary", use_container_width=True):
+    token = st.session_state.editor
+    if st.session_state.get("event_draft_id") != token:
+        st.session_state.event_draft_id = token
+        st.session_state.event_step = 1
+        st.session_state.event_draft = {"title": original["title"] if original else "", "date": original["date"] if original else chosen.isoformat(),
+            "who": original["who"] if original else "가족 모두", "time": original["time"] if original else "",
+            "prep": "\n".join(i["text"] for i in original["items"]) if original else ""}
+    draft = st.session_state.event_draft
+    step = st.session_state.event_step
+    st.caption(f"{step} / 2단계 · {'일정 정보' if step == 1 else '장소와 준비물'}")
+    if step == 1:
+        with st.form("event_basics"):
+            title = st.text_input("일정 이름 *", value=draft["title"], max_chars=70, placeholder="예: 함께하는 주말 피크닉")
+            when = st.date_input("날짜", value=date.fromisoformat(draft["date"]))
+            people = ["가족 모두"] + DATA["members"]
+            who = st.selectbox("함께하는 가족", people, index=people.index(draft["who"]))
+            if st.form_submit_button("다음 · 장소와 준비물", type="primary", use_container_width=True):
+                if not title.strip():
+                    st.error("일정 이름을 적어 주세요.")
+                else:
+                    draft.update(title=title.strip(), date=when.isoformat(), who=who)
+                    st.session_state.event_step = 2
+                    st.rerun()
+    else:
+        with st.form("event_details"):
+            place = st.text_input("시간 · 장소", value=draft["time"], max_chars=100, placeholder="예: 오전 11시 · 동네 공원")
+            prep = st.text_area("준비물 (한 줄에 하나씩)", value=draft["prep"], max_chars=2000, height=100, placeholder="예: 돗자리\n도시락")
+            previous = st.form_submit_button("이전 · 일정 정보", use_container_width=True)
+            submit = st.form_submit_button("일정 수정" if original else "일정 등록", type="primary", use_container_width=True)
+        if previous:
+            draft.update(time=place.strip(), prep=prep)
+            st.session_state.event_step = 1
+            st.rerun()
+        if submit:
             labels = [s.strip() for s in prep.splitlines() if s.strip()]
-            if not title.strip():
-                st.error("일정 이름을 적어 주세요.")
-            elif len(labels) > 50 or any(len(s) > 100 for s in labels):
+            if len(labels) > 50 or any(len(s) > 100 for s in labels):
                 st.error("준비물은 50개까지, 각각 100자 이내로 적어 주세요.")
             else:
                 old_checks = {i["text"]: i["done"] for i in original["items"]} if original else {}
-                values = {"title": title.strip(), "date": when.isoformat(), "who": who, "time": place.strip(),
+                values = {"title": draft["title"], "date": draft["date"], "who": draft["who"], "time": place.strip(),
                     "items": [{"text": s, "done": old_checks.get(s, False)} for s in dict.fromkeys(labels)]}
                 if original:
                     original.update(values)
                 else:
                     DATA["events"].append({"id": new_id(), **values})
-                st.session_state.update(selected_day=when.isoformat(), month=when.replace(day=1).isoformat())
+                when = date.fromisoformat(draft["date"])
+                st.session_state.update(selected_day=when.isoformat(), month=when.replace(day=1).isoformat(), calendar_mode="선택일 일정")
                 st.session_state.pop("editor", None)
+                st.session_state.pop("event_draft_id", None)
                 save("가족 일정을 저장했어요.")
     if st.button("캘린더로 돌아가기"):
         st.session_state.pop("editor", None)
+        st.session_state.pop("event_draft_id", None)
         st.rerun()
 
 
 def calendar_page():
-    st.title("함께할 날을 기록해요.")
-    st.caption("평범한 약속부터 특별한 날까지, 우리 가족의 캘린더예요.")
+    st.title("우리집 캘린더")
     st.session_state.setdefault("month", TODAY.replace(day=1).isoformat())
     st.session_state.setdefault("selected_day", TODAY.isoformat())
     cursor = date.fromisoformat(st.session_state.month)
@@ -514,8 +586,10 @@ def calendar_page():
     if editor == "new_event" or original:
         event_editor(chosen, original)
         return
-    left, right = st.columns([1.35, 1], gap="large")
-    with left:
+    if st.session_state.pop("calendar_jump", False):
+        st.session_state.calendar_mode = "선택일 일정"
+    mode = st.radio("일정 보기", ["달력", "선택일 일정"], horizontal=True, label_visibility="collapsed", key="calendar_mode")
+    if mode == "달력":
         with st.container(key="monthnav"):
             a, b, c = st.columns([1.1, 3, 1.1])
             previous = a.button("이전 달", use_container_width=True, disabled=cursor.year <= 1900 and cursor.month == 1)
@@ -539,12 +613,13 @@ def calendar_page():
                     label = f"{num}" + (" ·" if day.isoformat() in event_days else "")
                     if col.button(label, key="day_" + day.isoformat(), type="primary" if day == chosen else "secondary", use_container_width=True, help=f'{day.isoformat()}{" (오늘)" if day == TODAY else ""}{" · 일정 있음" if day.isoformat() in event_days else ""}'):
                         st.session_state.selected_day = day.isoformat()
+                        st.session_state.calendar_jump = True
                         st.rerun()
-        st.caption("· 표시가 있는 날에는 가족 일정이 있어요.")
+        st.caption("날짜를 누르면 그날의 일정을 볼 수 있어요. · 일정 있음")
         if st.button("오늘로 이동"):
             st.session_state.update(month=TODAY.replace(day=1).isoformat(), selected_day=TODAY.isoformat())
             st.rerun()
-    with right:
+    else:
         section(f"{chosen.month}월 {chosen.day}일 ({WEEKDAYS[chosen.weekday()]})")
         if st.button("＋ 이 날의 일정 추가", type="primary", use_container_width=True):
             st.session_state.editor = "new_event"
@@ -552,10 +627,13 @@ def calendar_page():
         events = [e for e in DATA["events"] if e["date"] == chosen.isoformat()]
         if not events:
             empty("아직 일정이 없어요. 함께할 약속을 남겨보세요.")
-        for e in events:
+        e = pager(events, "event_page_" + chosen.isoformat())
+        if e:
             card(e["title"], f'{e["who"]} · {e["time"] or "시간·장소 미정"}')
-            for i, item in enumerate(e["items"]):
-                done = st.checkbox(item["text"], value=item["done"], key=f'prep_{e["id"]}_{i}_{item["done"]}')
+            item_index = pager(list(range(len(e["items"]))), "prep_page_" + e["id"])
+            if item_index is not None:
+                item = e["items"][item_index]
+                done = st.checkbox("준비물 · " + item["text"], value=item["done"], key=f'prep_{e["id"]}_{item_index}_{item["done"]}')
                 if done != item["done"]:
                     item["done"] = done
                     save("준비물 상태를 저장했어요.")
@@ -575,11 +653,12 @@ def calendar_page():
 
 def settings_page():
     st.title("우리집을 가꿔요.")
-    st.caption("함께할 가족을 등록하고, 소중한 기록을 안전하게 챙기세요.")
-    left, right = st.columns([1.2, 1], gap="large")
-    with left:
+    mode = st.radio("설정 메뉴", ["가족", "백업", "복원", "안내"], horizontal=True, label_visibility="collapsed")
+    if mode == "가족":
         section("함께하는 가족", f"{len(DATA['members'])} / 30명")
-        for i, n in enumerate(DATA["members"]):
+        n = pager(DATA["members"], "settings_family")
+        if n:
+            i = DATA["members"].index(n)
             html(f'<div class="person"><div class="avatar" style="background:{PALETTE[i % 5]}">{escape(n[:1])}</div><div class="person-main">{escape(n)}</div><span class="pill neutral">우리 가족</span></div>')
         with st.form("add_member", clear_on_submit=True):
             n = st.text_input("가족 별명 *", max_chars=16, placeholder="예: 엄마, 아빠, 지우")
@@ -595,37 +674,43 @@ def settings_page():
                     DATA["members"].append(n)
                     save("새로운 가족을 맞이했어요.")
         st.caption("기록을 보호하기 위해 가족 삭제는 제공하지 않아요.")
-    with right:
+    elif mode == "백업":
         section("기록 백업")
         st.write("가족의 기록을 파일로 보관해 두세요. 다른 곳에서 다시 시작할 때도 가져올 수 있어요.")
         payload = {"format": "woorijip", "version": 2, "exported_at": datetime.now(KST).isoformat(), "data": DATA}
         st.download_button("전체 기록 다운로드", json.dumps(payload, ensure_ascii=False, indent=2), file_name=f"우리집_백업_{TODAY.isoformat()}.json", mime="application/json", use_container_width=True)
-        st.warning("Streamlit Community Cloud에서는 앱 재시작·재배포 시 기록이 사라질 수 있어요. 중요한 기록은 정기적으로 다운로드해 주세요.")
-        with st.expander("기존 백업 가져오기"):
-            st.caption("이전 버전의 JSON 백업도 지원해요. 가져오면 현재 기록 전체가 바뀌어요.")
-            uploaded = st.file_uploader("백업 파일", type=["json"], key="restore_upload")
-            candidate = None
-            if uploaded is not None:
-                if uploaded.size > 5 * 1024 * 1024:
-                    st.error("5MB 이하의 백업 파일을 선택해 주세요.")
-                else:
-                    try:
-                        candidate = validate(json.loads(uploaded.getvalue().decode("utf-8-sig")))
-                        st.caption(f'가족 {len(candidate["members"])}명 / 부탁 {len(candidate["tasks"])}개 / 일정 {len(candidate["events"])}개')
-                    except (ValueError, TypeError, KeyError, AttributeError, RecursionError):
-                        st.error("올바른 우리집 백업 파일이 아니에요. 원본 파일을 다시 선택해 주세요.")
-            signature = hashlib.sha256(uploaded.getvalue()).hexdigest() if uploaded is not None else "none"
-            agree = st.checkbox("현재 기록이 모두 교체되는 것에 동의해요", key="restore_agree_" + signature)
-            if st.button("백업으로 교체", disabled=candidate is None or not agree):
-                DATA.clear()
-                DATA.update(candidate)
-                for key in ("actor", "editor", "confirm_task", "confirm_event"):
-                    st.session_state.pop(key, None)
-                save("백업을 가져왔어요.")
+        st.warning("앱 재시작·재배포 시 기록이 사라질 수 있어요. 중요한 기록은 정기적으로 백업해 주세요.")
+    elif mode == "복원":
+        st.caption("이전 JSON 백업도 지원해요. 현재 기록 전체가 바뀌어요.")
+        uploaded = st.file_uploader("백업 파일 (5MB 이하)", type=["json"], key="restore_upload")
+        candidate = None
+        if uploaded is not None:
+            if uploaded.size > 5 * 1024 * 1024:
+                st.error("5MB 이하의 백업 파일을 선택해 주세요.")
+            else:
+                try:
+                    candidate = validate(json.loads(uploaded.getvalue().decode("utf-8-sig")))
+                    st.caption(f'가족 {len(candidate["members"])}명 / 부탁 {len(candidate["tasks"])}개 / 일정 {len(candidate["events"])}개')
+                except (ValueError, TypeError, KeyError, AttributeError, RecursionError):
+                    st.error("올바른 우리집 백업 파일이 아니에요.")
+        signature = hashlib.sha256(uploaded.getvalue()).hexdigest() if uploaded is not None else "none"
+        agree = st.checkbox("현재 기록이 모두 교체되는 것에 동의해요", key="restore_agree_" + signature)
+        if st.button("백업으로 교체", disabled=candidate is None or not agree):
+            DATA.clear()
+            DATA.update(candidate)
+            for key in ("actor", "editor", "confirm_task", "confirm_event", "event_draft_id"):
+                st.session_state.pop(key, None)
+            save("백업을 가져왔어요.")
+    else:
         section("가족끼리 사용하는 공간")
         st.caption("가족 선택은 로그인 기능이 아니에요. 선택한 별명으로 부탁을 맡고 완료를 확인해요. 주소만으로 접근하지 못하게 하려면 Streamlit 앱의 Secrets에 APP_PASSWORD를 설정해 주세요.")
         st.caption("최신 소식을 보려면 아래 버튼을 눌러 주세요.")
         if st.button("최신 기록 불러오기", use_container_width=True):
+            st.rerun()
+        if st.session_state.get("demo") and st.button("체험 종료 · 내 가족 등록", use_container_width=True):
+            for key in list(st.session_state):
+                if key != "access_digest":
+                    del st.session_state[key]
             st.rerun()
 
 
@@ -658,16 +743,12 @@ def main():
     except (sqlite3.Error, OSError, ValueError, TypeError, KeyError):
         st.error("우리집 기록을 읽지 못했어요. 원본 저장 파일을 보관한 뒤 저장 공간과 백업 형식을 확인해 주세요. 기록은 자동으로 초기화하지 않았어요.")
         st.stop()
-    html(f'<div class="masthead"><div class="brand"><span class="brand-mark">⌂</span>우리집<span class="brand-note">함께 챙기는 하루</span></div><div class="dateline">{TODAY.year}년 {TODAY.month}월 {TODAY.day}일 {WEEKDAYS[TODAY.weekday()]}요일</div></div>')
+    date_label = f"{TODAY.month}월 {TODAY.day}일 {WEEKDAYS[TODAY.weekday()]}요일"
+    if st.session_state.get("demo"):
+        date_label = "예시 체험 · " + date_label
+    html(f'<div class="masthead"><div class="brand"><span class="brand-mark">⌂</span>우리집</div><div class="dateline">{date_label}</div></div>')
     if st.session_state.get("flash"):
         st.toast(st.session_state.pop("flash"), icon="✅")
-    if st.session_state.get("demo"):
-        st.caption("예시 체험 중 · 이름과 기록은 모두 예시이며 실제 기록과 분리돼요.")
-        if st.button("체험 종료 · 내 가족 등록"):
-            for k in list(st.session_state):
-                if k != "access_digest":
-                    del st.session_state[k]
-            st.rerun()
     st.session_state.setdefault("page", "오늘")
     with st.container(key="navigation"):
         for col, page in zip(st.columns(4), ["오늘", "부탁", "일정", "설정"]):
@@ -675,17 +756,18 @@ def main():
             if col.button(label, type="primary" if st.session_state.page == page else "secondary", use_container_width=True):
                 go(page)
     if not DATA["members"]:
-        html('<div class="hero"><div class="hero-label">우리 가족만의 작은 공간</div><div class="hero-title">함께 챙기면<br>더 다정한 하루.</div><div class="hero-note">저녁 소식, 작은 부탁, 가족 일정을 한곳에 모아요.</div>' + ILLUSTRATION + '</div>')
+        html('<div class="hero"><div class="hero-label">우리 가족만의 작은 공간</div><div class="hero-title">함께 챙기는 하루.</div><div class="hero-note">저녁 소식, 부탁, 가족 일정을 한곳에 모아요.</div>' + ILLUSTRATION + '</div>')
         if st.button("예시로 먼저 둘러보기"):
             st.session_state.update(demo=True, demo_data=demo_data(), demo_revision=0, page="오늘")
             st.rerun()
         settings_page()
     else:
-        a, b = st.columns([3, 1])
-        a.caption("우리 가족의 일상 노트" + (" · 예시 체험" if st.session_state.get("demo") else ""))
         if st.session_state.get("actor") not in DATA["members"]:
             st.session_state.actor = DATA["members"][0]
-        actor = b.selectbox("지금 사용하는 가족", DATA["members"], key="actor", on_change=lambda: st.session_state.pop("editor", None))
+        with st.container(key="profile"):
+            a, b = st.columns([1.2, 1])
+            a.markdown('<div class="profile-label">지금 사용하는 가족</div>', unsafe_allow_html=True)
+            actor = b.selectbox("지금 사용하는 가족", DATA["members"], key="actor", label_visibility="collapsed", on_change=lambda: st.session_state.pop("editor", None))
         page = st.session_state.page
         if page == "오늘":
             today_page(actor)
@@ -695,7 +777,6 @@ def main():
             calendar_page()
         else:
             settings_page()
-    html('<div class="footer"><span>작은 소식을 나누는 곳, 우리집</span><span>기록은 설정에서 백업할 수 있어요.</span></div>')
 
 
 if __name__ == "__main__":
