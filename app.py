@@ -99,6 +99,9 @@ input::selection,textarea::selection {background:#d7e9cb!important;color:#183c29
 [data-baseweb="popover"],[data-baseweb="menu"],[role="listbox"],[role="option"],[data-baseweb="calendar"] {background:#fff!important;color:#243b30!important;color-scheme:light!important;}
 [data-baseweb="popover"] *,[data-baseweb="menu"] *,[role="listbox"] *,[role="option"] * {color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
 [role="option"][aria-selected="true"],[role="option"]:hover,[data-baseweb="menu"] li:hover {background:#e1edda!important;color:#183c29!important;}
+/* Dark help bubbles keep white text, independent of the page and menu text colors. */
+[data-testid="stTooltipContent"] {background:#2d2c29!important;}
+[role="tooltip"],[role="tooltip"] *,[data-testid="stTooltipContent"],[data-testid="stTooltipContent"] * {color:#fff!important;-webkit-text-fill-color:#fff!important;}
 [data-testid="stRadio"] label p,[data-testid="stCheckbox"] label p {color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;font-size:13px!important;}
 [data-testid="stRadioOption"] > div > div:first-child {background:#fff!important;border-color:#739076!important;}
 [data-testid="stRadioOption"][data-selected="true"] > div > div:first-child {background:#2e5943!important;border-color:#2e5943!important;}
