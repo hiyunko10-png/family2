@@ -39,60 +39,91 @@ PALETTE = ["#e7eee4", "#faead9", "#e6edf5", "#f1e5eb", "#ede9d9"]
 
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
-:root {color-scheme:light!important;--text-color:#263c32;--background-color:#f7f8f3;--secondary-background-color:#fff;--primary-color:#2e5943;}
-html,body,.stApp {font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif!important;background:#f7f8f3!important;color:#263c32!important;}
-[data-testid="stAppViewContainer"] {background:#f7f8f3!important;}
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap');
+:root {color-scheme:light!important;--pine:#244c3e;--ink:#283e33;--muted:#607166;--paper:#f5f6f0;--sage:#e7ede3;--line:#dce4d8;--text-color:var(--ink);--background-color:var(--paper);--secondary-background-color:#fff;--primary-color:var(--pine);}
+html,body,.stApp {font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif!important;background:var(--paper)!important;color:var(--ink)!important;word-break:keep-all;}
+[data-testid="stAppViewContainer"] {background:var(--paper)!important;}
+[data-testid="stMarkdownContainer"],input,textarea {font-family:inherit;}
 [data-testid="stHeader"],[data-testid="stToolbar"],footer {display:none!important;}
-/* Only the page content is compacted; never hide overflowing form fields or the keyboard. */
-.block-container,[data-testid="stMainBlockContainer"] {max-width:470px!important;padding:12px 16px calc(77px + env(safe-area-inset-bottom))!important;}
-[data-testid="stVerticalBlock"] {gap:7px!important;}
-[data-testid="stHorizontalBlock"] {gap:8px!important;flex-wrap:nowrap!important;}
+/* A small daily-use canvas, not a desktop dashboard. Overflow stays available for zoom and keyboards. */
+.block-container,[data-testid="stMainBlockContainer"] {max-width:470px!important;padding:18px 20px calc(88px + env(safe-area-inset-bottom))!important;}
+[data-testid="stVerticalBlock"] {gap:14px!important;}
+[data-testid="stHorizontalBlock"] {gap:10px!important;flex-wrap:nowrap!important;}
 [data-testid="stColumn"] {min-width:0!important;}
-h1,h2,h3,p,label {word-break:keep-all;}
-h1 {font-family:'Gowun Batang',serif!important;font-size:23px!important;line-height:1.5!important;padding:2px 0 4px!important;font-weight:700!important;color:#263c32!important;}
-h2,h3 {font-size:17px!important;color:#263c32!important;padding:2px 0!important;}
-p {font-size:13px;line-height:1.7;}
-[data-testid="stMarkdownContainer"],[data-testid="stWidgetLabel"],label {color:#263c32!important;}
-[data-testid="stWidgetLabel"] p {font-size:12px!important;color:#344f3f!important;}
-[data-testid="stCaptionContainer"] p {font-size:11px!important;line-height:1.6!important;color:#586d5e!important;}
+h1,h2,h3,p,label {word-break:keep-all;letter-spacing:normal;}
+h1,h2,h3 {text-wrap:balance;scroll-margin-top:16px;}
+h1 {font-size:24px!important;line-height:1.5!important;padding:0!important;font-weight:750!important;color:var(--ink)!important;}
+h2,h3 {font-size:17px!important;color:var(--ink)!important;padding:2px 0!important;}
+p {font-size:14px;line-height:1.75;}
+[data-testid="stMarkdownContainer"],[data-testid="stWidgetLabel"],label {color:var(--ink)!important;}
+/* Do not restore Streamlit's negative trailing margin: it overlaps custom cards and headings. */
+[data-testid="stMarkdownContainer"] {margin-bottom:0!important;}
+[data-testid="stMarkdownContainer"] p {margin-top:0!important;margin-bottom:0!important;}
+[data-testid="stWidgetLabel"] p {font-size:12px!important;font-weight:600;color:#425a49!important;}
+[data-testid="stCaptionContainer"] p {font-size:12px!important;line-height:1.7!important;color:var(--muted)!important;}
+[data-testid="stHeaderActionElements"] {display:none;}
 button {touch-action:manipulation;}
-[data-testid="stButton"] button,[data-testid="stDownloadButton"] button,[data-testid="stFormSubmitButton"] button {border:1px solid #ccd9c9!important;border-radius:10px!important;min-height:40px!important;background:#fff!important;color:#294d3b!important;box-shadow:none!important;padding:5px 9px!important;}
-button p,button span {color:inherit!important;-webkit-text-fill-color:currentColor!important;font-size:13px!important;}
-button[kind="primary"],button[kind="primaryFormSubmit"] {background:#2e5943!important;border-color:#2e5943!important;color:#fff!important;}
+button,label,a {-webkit-tap-highlight-color:#b9cfa844;}
+[data-testid="stButton"] button,[data-testid="stDownloadButton"] button,[data-testid="stFormSubmitButton"] button {border:1px solid #d1ddce!important;border-radius:13px!important;min-height:44px!important;background:#fff!important;color:var(--pine)!important;box-shadow:none!important;padding:8px 15px!important;}
+[data-testid="stButton"] button > div,[data-testid="stFormSubmitButton"] button > div {gap:9px!important;}
+button p,button span {color:inherit!important;-webkit-text-fill-color:currentColor!important;font-size:13px!important;font-weight:600;}
+button [data-testid="stIconMaterial"] {font-size:20px!important;font-weight:400!important;line-height:1!important;}
+button[kind="primary"],button[kind="primaryFormSubmit"] {background:var(--pine)!important;border-color:var(--pine)!important;color:#fff!important;}
 button[kind="primary"] *,button[kind="primaryFormSubmit"] * {color:#fff!important;-webkit-text-fill-color:#fff!important;}
-button:disabled {opacity:.5;}
-button:focus-visible,input:focus-visible,textarea:focus-visible {outline:3px solid #b57a35!important;outline-offset:2px;}
-[data-testid="stForm"] {border:1px solid #dce4d9!important;border-radius:14px!important;background:#fff!important;padding:12px!important;}
-/* Override foreground AND background, including inherited WebKit text fills and portals. */
+@media(hover:hover) {[data-testid="stButton"] button:not(:disabled):hover {background:#edf2e8!important;border-color:#9bb396!important;}button[kind="primary"]:not(:disabled):hover,button[kind="primaryFormSubmit"]:not(:disabled):hover {background:#32634e!important;border-color:#32634e!important;}}
+button:disabled {opacity:.42;}
+button:focus-visible,input:focus-visible,textarea:focus-visible {outline:3px solid #a87332!important;outline-offset:3px;}
+[data-testid="stForm"] {border:1px solid var(--line)!important;border-radius:20px!important;background:#fff!important;padding:18px!important;}
+[data-testid="stForm"] [data-testid="stVerticalBlock"] {gap:14px!important;}
+/* Match both foreground and background, including WebKit fills and portalled menus. */
 input,textarea,[contenteditable="true"] {background:#fff!important;color:#243b30!important;-webkit-text-fill-color:#243b30!important;caret-color:#243b30!important;opacity:1!important;font-size:16px!important;}
 input::placeholder,textarea::placeholder {color:#6b786f!important;-webkit-text-fill-color:#6b786f!important;opacity:1!important;}
 input::selection,textarea::selection {background:#d7e9cb!important;color:#183c29!important;-webkit-text-fill-color:#183c29!important;}
-[data-baseweb="input"],[data-baseweb="base-input"],[data-baseweb="textarea"],[data-baseweb="select"]>div {background:#fff!important;border-color:#c7d5c5!important;color:#243b30!important;border-radius:9px!important;}
+[data-baseweb="input"],[data-baseweb="base-input"],[data-baseweb="textarea"],[data-baseweb="select"]>div {background:#fff!important;border-color:#ccd8c8!important;color:#243b30!important;border-radius:11px!important;}
 [data-baseweb="select"] div,[data-baseweb="select"] span {background:#fff!important;color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
 [data-baseweb="select"] svg {fill:#385641!important;color:#385641!important;}
-/* Streamlit 1.67+ uses React Aria; older 1.x uses BaseWeb above. */
-[data-testid="stSelectbox"] [role="group"] {background:#fff!important;color:#243b30!important;border-color:#c7d5c5!important;}
+/* React Aria in new Streamlit versions, BaseWeb in older 1.x versions. */
+[data-testid="stSelectbox"] [role="group"] {background:#fff!important;color:#243b30!important;border-color:#ccd8c8!important;border-radius:11px!important;}
 [data-testid="stSelectbox"] button {background:#fff!important;color:#385641!important;border:0!important;}
 [data-testid="stSelectbox"] button svg {color:#385641!important;fill:#385641!important;}
-[data-testid="stSelectbox"] [role="group"][data-focus-within] {border-color:#2e5943!important;}
+[data-testid="stSelectbox"] [role="group"][data-focus-within] {border-color:var(--pine)!important;outline:2px solid #b6c9aa;outline-offset:2px;}
 [data-testid="stTextInput"] button {background:#fff!important;color:#385641!important;}
+[data-testid="stTextInputRootElement"] {background:#fff!important;border:1px solid #ccd8c8!important;border-radius:11px!important;}
+[data-testid="stTextInputRootElement"]:focus-within {border-color:var(--pine)!important;outline:2px solid #b6c9aa;outline-offset:2px;}
 [data-testid="stDateInput"] [role="group"] {background:#fff!important;color:#243b30!important;}
 [data-testid="stDateInputField"],[data-testid="stDateInputField"] *,[data-testid="stDateInputCalendarButton"] {background:#fff!important;color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
 [data-testid="stDateInputCalendar"],[data-testid="stDateInputCalendar"] * {background-color:#fff!important;color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
-[data-testid="stDateInputCalendar"] [aria-selected="true"],[data-testid="stDateInputCalendar"] [data-selected="true"], [data-testid="stDateInputCalendar"] [aria-selected="true"] * {background-color:#dcebcf!important;color:#1d402a!important;}
+[data-testid="stDateInputCalendar"] [aria-selected="true"],[data-testid="stDateInputCalendar"] [data-selected="true"],[data-testid="stDateInputCalendar"] [aria-selected="true"] * {background-color:#dcebcf!important;color:#1d402a!important;}
 [role="spinbutton"]:focus-visible {outline:2px solid #2e5943!important;outline-offset:1px;}
 [data-baseweb="popover"],[data-baseweb="menu"],[role="listbox"],[role="option"],[data-baseweb="calendar"] {background:#fff!important;color:#243b30!important;color-scheme:light!important;}
 [data-baseweb="popover"] *,[data-baseweb="menu"] *,[role="listbox"] *,[role="option"] * {color:#243b30!important;-webkit-text-fill-color:#243b30!important;}
 [role="option"][aria-selected="true"],[role="option"]:hover,[data-baseweb="menu"] li:hover {background:#e1edda!important;color:#183c29!important;}
-[data-testid="stRadio"] label p,[data-testid="stCheckbox"] label p {color:#263c32!important;-webkit-text-fill-color:#263c32!important;font-size:12px!important;}
+[data-testid="stRadio"] label p,[data-testid="stCheckbox"] label p {color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;font-size:13px!important;}
 [data-testid="stRadioOption"] > div > div:first-child {background:#fff!important;border-color:#739076!important;}
 [data-testid="stRadioOption"][data-selected="true"] > div > div:first-child {background:#2e5943!important;border-color:#2e5943!important;}
 [data-testid="stRadioOption"][data-selected="true"] > div > div:first-child > div {background:#fff!important;}
+.st-key-view_tabs [data-testid="stElementContainer"],.st-key-meal_choices [data-testid="stElementContainer"] {width:100%!important;max-width:100%!important;}
+.st-key-view_tabs [role="radiogroup"] {display:flex!important;width:100%!important;flex-wrap:nowrap!important;gap:3px!important;padding:4px;background:#e8ede4;border-radius:14px;}
+.st-key-view_tabs [role="radiogroup"] > div {flex:1 1 0!important;min-width:0!important;}
+.st-key-view_tabs [role="radiogroup"] > label,.st-key-meal_choices [role="radiogroup"] > label {flex:1 1 0!important;min-width:0!important;margin:0!important;}
+.st-key-view_tabs [role="radiogroup"] label {display:flex!important;justify-content:center!important;align-items:center!important;width:100%;min-height:36px;padding:3px 6px!important;border-radius:10px;cursor:pointer;}
+.st-key-view_tabs [role="radiogroup"] label p {font-size:13px!important;font-weight:500;white-space:nowrap;color:#536b58!important;}
+.st-key-view_tabs [role="radiogroup"] label:has(input:checked) {background:#fff;box-shadow:0 1px 4px #28452b10;}
+.st-key-view_tabs [role="radiogroup"] label:has(input:checked) p {color:var(--pine)!important;font-weight:700;}
+.st-key-view_tabs [data-testid="stRadioOption"] > div > div:first-child,.st-key-view_tabs [data-baseweb="radio"] > div:first-child,.st-key-meal_choices [data-testid="stRadioOption"] > div > div:first-child,.st-key-meal_choices [data-baseweb="radio"] > div:first-child {display:none!important;}
+.st-key-view_tabs label:has(input:focus-visible),.st-key-meal_choices label:has(input:focus-visible) {outline:3px solid #a87332!important;outline-offset:1px;}
+.st-key-meal_choices [role="radiogroup"] {display:flex!important;width:100%!important;flex-wrap:nowrap!important;gap:7px!important;}
+.st-key-meal_choices [role="radiogroup"] > div {flex:1 1 0!important;min-width:0!important;}
+.st-key-meal_choices [role="radiogroup"] label {display:flex!important;justify-content:center!important;align-items:center!important;width:100%;min-height:42px;padding:4px 3px!important;border:1px solid var(--line);border-radius:11px;cursor:pointer;}
+.st-key-meal_choices [role="radiogroup"] label p {font-size:13px!important;white-space:nowrap;}
+.st-key-meal_choices [role="radiogroup"] label:has(input:checked) {background:#eaf1e5;border-color:#5d805e;}
+.st-key-meal_choices [role="radiogroup"] label:has(input:checked) p {color:var(--pine)!important;font-weight:700;}
 [data-testid="stCheckbox"] label > div:first-of-type {background:#fff!important;border:1px solid #739076!important;}
 [data-testid="stCheckbox"] label:has(input:checked) > div:first-of-type {background:#2e5943!important;border-color:#2e5943!important;}
 [data-testid="stCheckbox"] label:has(input:checked) svg {color:#fff!important;fill:#fff!important;}
-[data-testid="stToast"] {background:#fff!important;color:#263c32!important;border:1px solid #c7d5c5!important;}
+[data-testid="stCheckbox"] label:has(input:focus-visible) {outline:3px solid #a87332;outline-offset:4px;border-radius:4px;}
+[data-testid="stToast"] {background:#fff!important;color:#263c32!important;border:1px solid #c7d5c5!important;border-radius:14px;}
 [data-testid="stToast"] * {color:#263c32!important;-webkit-text-fill-color:#263c32!important;}
 [data-testid="stFileUploaderDropzone"] {background:#fff!important;color:#263c32!important;padding:10px!important;}
 [data-testid="stFileUploaderDropzone"] * {color:#263c32!important;}
@@ -100,72 +131,116 @@ input::selection,textarea::selection {background:#d7e9cb!important;color:#183c29
 [data-testid="stFileChip"] *,[data-testid="stFileUploaderFile"] * {color:#263c32!important;-webkit-text-fill-color:#263c32!important;}
 [data-testid="stFileUploader"] button {background:#fff!important;color:#385641!important;}
 [data-testid="InputInstructions"],[data-testid="stInputInstructions"] {display:none!important;}
-[data-testid="stAlert"] {padding:8px 10px!important;border-radius:10px;background:#fff2d9!important;color:#594522!important;}
+[data-testid="stAlert"] {padding:10px 12px!important;border-radius:13px;background:#faf0d9!important;color:#594522!important;}
 [data-testid="stAlert"] * {color:#594522!important;-webkit-text-fill-color:#594522!important;}
 [data-testid="stAlert"] p {font-size:12px!important;}
-.masthead {display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #dce3d8;padding-bottom:9px;margin-bottom:2px;}
-.brand {display:flex;align-items:center;gap:8px;font-size:21px;font-weight:800;}
-.brand-mark {width:29px;height:29px;background:#2e5943;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:20px;}
-.dateline {font-size:11px;color:#586d5e;}
-.st-key-navigation {position:fixed!important;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,470px)!important;z-index:100;background:#f7f8f3!important;border-top:1px solid #d3decd;padding:9px 12px calc(9px + env(safe-area-inset-bottom));}
+.st-key-app_header {padding-bottom:4px;}
+.st-key-app_header > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"] {align-items:center!important;}
+.brand {display:flex;align-items:center;gap:10px;min-height:51px;}
+.brand-mark {width:37px;height:41px;background:var(--pine);border-radius:14px 14px 11px 11px;display:grid;place-items:center;flex-shrink:0;}
+.brand-mark svg {width:23px;height:25px;}
+.brand-word {display:flex;align-items:center;gap:7px;font-size:23px;font-weight:800;line-height:1.35;white-space:nowrap;}
+.dateline {font-size:11px;color:var(--muted);margin-top:3px;line-height:1.6;}
+.demo-tag {font-size:10px;font-weight:600;color:#4c674e;background:#e6eddf;border-radius:5px;padding:3px 5px;line-height:1.3;}
+.st-key-app_header [data-testid="stWidgetLabel"] p {font-size:10px!important;color:var(--muted)!important;font-weight:500;}
+.st-key-app_header [data-testid="stWidgetLabel"] {min-height:14px!important;height:14px!important;margin-bottom:4px!important;}
+.st-key-app_header [data-testid="stSelectbox"] [role="group"] {height:35px!important;min-height:35px!important;border:1px solid #d6dfd0!important;border-radius:10px!important;}
+.st-key-app_header [data-testid="stSelectbox"] input {font-size:13px!important;font-weight:650;min-width:0!important;}
+.st-key-app_header [data-testid="stSelectbox"] button {min-height:30px!important;}
+.st-key-navigation {position:fixed!important;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,470px)!important;z-index:100;background:#fcfdf9!important;border-top:1px solid #e0e7db;box-shadow:0 -8px 28px #2b442507;padding:8px 16px calc(8px + env(safe-area-inset-bottom));}
+.st-key-navigation [data-testid="stHorizontalBlock"] {gap:12px!important;}
 .st-key-navigation [data-testid="stColumn"] {width:0!important;flex:1 1 0!important;}
-.st-key-navigation button {border:0!important;background:transparent!important;}
-.st-key-navigation button[kind="primary"] {background:#e1ebd9!important;color:#254c36!important;}
-.st-key-navigation button[kind="primary"] * {color:#254c36!important;-webkit-text-fill-color:#254c36!important;}
-.st-key-profile [data-testid="stWidgetLabel"] {display:none;}
-.st-key-profile [data-testid="stColumn"]:first-child {flex:1.2 1 0!important;}
-.st-key-profile [data-testid="stColumn"]:last-child {flex:1 1 0!important;}
-.profile-label {line-height:40px;font-size:12px;color:#586d5e;}
-.hero {position:relative;overflow:hidden;border-radius:16px;background:#e6eedf;min-height:99px;padding:13px 16px;}
-.hero-label {font-size:11px;color:#4c6348;}
-.hero-title {font-family:'Gowun Batang',serif;font-size:23px;font-weight:700;line-height:1.5;margin:3px 0;color:#244733;max-width:75%;}
-.hero-note {font-size:11px;color:#4c6348;max-width:73%;}
-.hero svg {position:absolute;width:106px;right:2px;bottom:-1px;}
-.sectionline {display:flex;align-items:center;justify-content:space-between;margin:4px 0;}
-.sectionline strong {font-size:15px;}.sectionline span {font-size:11px;color:#586d5e;}
-.person {display:flex;gap:11px;align-items:center;padding:15px;background:#fff;border:1px solid #dce4d9;border-radius:13px;}
-.avatar {display:grid;place-items:center;width:38px;height:38px;border-radius:50%;font-size:15px;font-weight:700;flex-shrink:0;}
-.person-main {flex:1;min-width:0;overflow-wrap:anywhere;font-size:14px;font-weight:600;}
-.person-main small {display:block;font-size:12px;font-weight:400;color:#586d5e;margin-top:3px;}
-.pill {display:inline-block;border-radius:6px;padding:3px 7px;font-size:11px;background:#e8efdf;color:#3c5c30;font-weight:600;}
-.pill.neutral {background:#edf0eb;color:#506453;}.pill.amber {background:#f8ecd8;color:#795223;}
-.note-card {background:#fff;border:1px solid #dce4d9;border-radius:14px;padding:14px 16px;}
-.note-card .title {font-size:17px;font-weight:700;line-height:1.55;overflow-wrap:anywhere;}
-.note-card .meta {font-size:12px;color:#586d5e;margin-top:6px;line-height:1.6;overflow-wrap:anywhere;}
-.note-card .reward {border-top:1px dashed #dbe2d4;margin-top:10px;padding-top:9px;font-size:13px;color:#73562b;overflow-wrap:anywhere;}
-.empty {padding:22px 15px;border:1px dashed #c5d5bf;border-radius:13px;color:#506651;text-align:center;font-size:13px;line-height:1.8;background:#f0f4e9;}
-.pager-count {text-align:center;font-size:12px;color:#586d5e;line-height:40px;}
-.st-key-calendar {padding:8px;border:1px solid #dce4d7;border-radius:14px;background:#fff;}
-.st-key-calendar [data-testid="stVerticalBlock"] {gap:2px!important;}
+.st-key-navigation button {border:0!important;background:transparent!important;min-height:54px!important;padding:6px 2px!important;color:#607363!important;}
+.st-key-navigation button > div {flex-direction:column!important;gap:3px!important;}
+.st-key-navigation button [data-has-shortcut] {display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important;}
+.st-key-navigation button p {font-size:11px!important;font-weight:500;line-height:1.5;}
+.st-key-navigation button [data-testid="stIconMaterial"] {font-size:22px!important;}
+.st-key-navigation button[kind="primary"] {background:#e9f0e3!important;color:var(--pine)!important;}
+.st-key-navigation button[kind="primary"] * {color:var(--pine)!important;-webkit-text-fill-color:var(--pine)!important;}
+.st-key-navigation button[kind="primary"] p {font-weight:750;}
+.st-key-navigation button:not(:disabled):hover {background:#f0f3eb!important;border-color:transparent!important;}
+.st-key-navigation button[kind="primary"]:not(:disabled):hover {background:#e9f0e3!important;}
+.hero {position:relative;isolation:isolate;overflow:hidden;border-radius:23px;background:#244c3e;min-height:157px;padding:20px 21px;color:#fff;}
+.hero-label {font-size:11px;font-weight:500;color:#d4e1ce;line-height:1.6;}
+.hero .hero-title {position:relative;z-index:1;font-family:'Gowun Batang',serif!important;font-size:25px!important;font-weight:700!important;line-height:1.55!important;margin:8px 0!important;padding:0!important;color:#fffdf4!important;max-width:75%;text-wrap:pretty;}
+.hero-note {position:relative;z-index:1;font-size:11px;line-height:1.7;color:#d4e1ce;max-width:72%;}
+.hero > svg {position:absolute;width:150px;height:150px;right:-2px;bottom:-3px;z-index:0;}
+.page-heading {padding:7px 0 1px;}
+.page-heading p {font-size:12px;line-height:1.7;color:var(--muted);margin-top:5px!important;}
+.sectionline {display:flex;gap:10px;align-items:center;justify-content:space-between;padding:3px 0;}
+.sectionline strong {font-size:15px;font-weight:700;line-height:1.6;}.sectionline span {font-size:11px;color:var(--muted);}
+.person {display:flex;gap:12px;align-items:center;padding:19px 17px;background:#fff;border:1px solid var(--line);border-radius:18px;}
+.avatar {display:grid;place-items:center;width:43px;height:43px;border-radius:16px;font-size:16px;font-weight:700;flex-shrink:0;color:var(--pine);}
+.person-main {flex:1;min-width:0;overflow-wrap:anywhere;font-size:15px;font-weight:700;line-height:1.6;}
+.person-main small {display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:3px;}
+.pill {display:inline-flex;align-items:center;gap:5px;border-radius:7px;padding:4px 8px;font-size:10px;line-height:1.6;background:#eaf1e4;color:#44633e;font-weight:650;}
+.pill::before {content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.pill.neutral {background:#edf0e9;color:#536551;}.pill.amber {background:#fbf0d9;color:#7a5c24;}
+.note-card {background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;}
+.note-card .card-top {margin-bottom:12px;}
+.note-card .title {font-size:19px;font-weight:700;line-height:1.6;overflow-wrap:anywhere;}
+.note-card .meta {font-size:12px;color:var(--muted);margin-top:9px;line-height:1.8;overflow-wrap:anywhere;}
+.note-card .reward {display:flex;align-items:center;gap:10px;background:#f7f3e6;border-radius:11px;margin-top:16px;padding:11px 12px;font-size:12px;line-height:1.7;color:#705a2f;overflow-wrap:anywhere;}
+.reward svg {width:19px;height:19px;flex-shrink:0;}
+.reward-label {display:block;color:#7b6845;font-size:10px;font-weight:500;line-height:1.5;}
+.empty {padding:26px 22px;border:1px solid var(--line);border-radius:20px;color:var(--muted);text-align:center;font-size:13px;line-height:1.8;background:#fff;}
+.empty-mark {display:grid;place-items:center;width:39px;height:39px;border-radius:14px;margin:0 auto 12px;background:#edf2e7;color:#537349;}
+.empty-mark svg {width:21px;height:21px;}
+.pager-count {text-align:center;font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted);line-height:44px;}
+.st-key-calendar {padding:12px 8px;border:1px solid var(--line);border-radius:20px;background:#fff;}
+.st-key-calendar,.st-key-calendar [data-testid="stVerticalBlock"] {gap:5px!important;}
 .st-key-calendar [data-testid="stHorizontalBlock"] {gap:3px!important;}
 .st-key-calendar [data-testid="stColumn"] {width:0!important;flex:1 1 0!important;}
-.st-key-calendar button {padding:0!important;border:0!important;min-height:34px!important;height:34px!important;}
+.st-key-calendar button {padding:0!important;border:0!important;background:transparent!important;min-height:38px!important;height:38px!important;border-radius:12px!important;font-variant-numeric:tabular-nums;}
+.st-key-calendar button[kind="primary"] {background:var(--pine)!important;}
+.st-key-calendar [data-testid="stColumn"]:first-child button:not([kind="primary"]) {color:#a75246!important;}
+.st-key-calendar [data-testid="stColumn"]:last-child button:not([kind="primary"]) {color:#4b6985!important;}
 .st-key-calendar button:disabled {visibility:hidden;}
-.weekday {text-align:center;color:#586d5e;font-size:11px;line-height:22px;}
-.calendar-title {font-size:17px;font-weight:700;text-align:center;line-height:40px;}
-.st-key-monthnav button {padding:0 4px!important;}.st-key-monthnav button p {font-size:12px!important;white-space:nowrap;}
-/* Small-height phones still retain a safe scrolling fallback for keyboards / zoom. */
+.weekday {text-align:center;color:var(--muted);font-size:11px;line-height:25px;}
+.st-key-calendar [data-testid="stColumn"]:first-child .weekday {color:#a75246;}
+.st-key-calendar [data-testid="stColumn"]:last-child .weekday {color:#4b6985;}
+.calendar-title {font-size:19px;font-weight:750;text-align:center;line-height:44px;}
+.st-key-monthnav button {padding:0 4px!important;background:transparent!important;border:0!important;}.st-key-monthnav button p {font-size:11px!important;white-space:nowrap;}
+.editor-progress {display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);padding:2px 0;}
+.editor-progress .step {width:23px;height:23px;border-radius:50%;background:#e5eddf;color:var(--pine);display:grid;place-items:center;font-size:11px;font-weight:700;}
+.editor-progress .step.active {background:var(--pine);color:#fff;}.editor-progress .step-line {width:17px;height:1px;background:#c3d2bb;}
+@media(min-width:600px) {[data-testid="stMain"] {border-left:1px solid #e4e9de;border-right:1px solid #e4e9de;max-width:470px;margin:0 auto;}}
 @media(max-height:700px) {
- .block-container,[data-testid="stMainBlockContainer"] {padding-top:8px!important;}
- [data-testid="stVerticalBlock"] {gap:5px!important;}
- h1 {font-size:21px!important;}.hero {min-height:84px;padding:10px 14px;}.hero-title {font-size:21px;}
- .hero svg {width:90px;}.st-key-calendar button {min-height:30px!important;height:30px!important;}
- [data-testid="stForm"] {padding:10px!important;}
+ .block-container,[data-testid="stMainBlockContainer"] {padding:9px 16px calc(76px + env(safe-area-inset-bottom))!important;}
+ [data-testid="stVerticalBlock"] {gap:10px!important;}
+ .st-key-app_header {padding-bottom:0;}.brand {min-height:48px;}
+ h1 {font-size:22px!important;}.page-heading {padding:2px 0 0;}.page-heading p {display:none;}
+ .hero {min-height:127px;padding:14px 17px;border-radius:20px;}.hero .hero-title {font-size:23px!important;margin:6px 0!important;line-height:1.45!important;}
+ .hero > svg {width:122px;height:122px;}.hero-note {font-size:10px;}
+ [data-testid="stForm"] {padding:14px!important;}.st-key-meal_choices [role="radiogroup"] label {min-height:39px;}
+ [data-testid="stForm"] [data-testid="stVerticalBlock"] {gap:11px!important;}
+ .st-key-calendar {padding:8px;}.st-key-calendar,.st-key-calendar [data-testid="stVerticalBlock"] {gap:3px!important;}
+ .st-key-calendar button {min-height:34px!important;height:34px!important;}.weekday {line-height:22px;}
+ .note-card {padding:16px 17px;}.note-card .title {font-size:18px;}.note-card .card-top {margin-bottom:9px;}
+ .note-card .reward {margin-top:12px;padding:9px 10px;}.note-card .reward-label {display:inline;margin-right:8px;}.person {padding:15px 16px;}
 }
 @media(prefers-reduced-motion:reduce) {* {transition:none!important;animation:none!important;}}
 </style>
 """
 
-ILLUSTRATION = """<svg viewBox="0 0 240 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="함께 식사할 준비가 된 작은 집">
-<circle cx="153" cy="62" r="31" fill="#f4dca2"/><path d="M15 195Q110 159 233 192" fill="none" stroke="#b7c9a8" stroke-width="2"/>
-<rect x="60" y="94" width="137" height="99" rx="6" fill="#faf9e9"/><path d="M41 99L125 33L213 99Z" fill="#3e684a"/>
-<path d="M40 100L125 34L212 100" fill="none" stroke="#2a4e39" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="115" y="137" width="35" height="56" rx="16" fill="#d9ac70"/><circle cx="141" cy="168" r="2" fill="#70593b"/>
-<rect x="76" y="118" width="25" height="26" rx="4" fill="#e8c778"/><path d="M88 118v26m-12-13h25" stroke="#fff9e4" stroke-width="3"/>
-<rect x="160" y="118" width="25" height="26" rx="4" fill="#e8c778"/><path d="M172 118v26m-12-13h25" stroke="#fff9e4" stroke-width="3"/>
-<path d="M35 190v-63m0 30C5 157 7 119 31 121c-9-22 21-30 28-10 22 7 15 41-24 46" fill="#7b9b66" stroke="#567746" stroke-width="3"/>
-<path d="M208 193v-28m0 10q-22-12-16-23 18-2 16 23m0 7q24-11 20-24-21-4-20 24" fill="#6b8c55" stroke="#567746" stroke-width="2"/>
-<path d="M118 194l-9 21h53l-16-21" fill="#c9d6b8"/></svg>"""
+ILLUSTRATION = """<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="따뜻한 불이 켜진 우리집">
+<circle cx="130" cy="39" r="15" fill="#e8cc91"/><path d="M0 155Q85 133 180 155v25H0" fill="#315746"/>
+<path d="M59 83l47-40 49 40v65H59z" fill="#d7dec5"/>
+<path d="M49 85l57-48 59 48" fill="none" stroke="#a9be9c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M65 84h83v64H65z" fill="#dfe4cf"/><path d="M128 51V34h11v26" fill="#8eaa81"/>
+<path d="M95 147v-25a13 13 0 0126 0v25" fill="#a2b48a"/><circle cx="115" cy="130" r="1.8" fill="#486447"/>
+<rect x="73" y="93" width="17" height="22" rx="7" fill="#e9c382"/><path d="M81.5 94v20m-8-10h16" stroke="#fff1c5" stroke-width="1.5"/>
+<rect x="128" y="93" width="13" height="19" rx="6" fill="#e9c382"/><path d="M134.5 94v17" stroke="#fff1c5" stroke-width="1.5"/>
+<path d="M95 148l-14 32h54l-14-32" fill="#718d65"/>
+<path d="M42 150V93" stroke="#8cae7a" stroke-width="2"/><ellipse cx="41" cy="99" rx="18" ry="27" fill="#688a5e"/><path d="M42 151v-48m0 24l-9-10m9 1l9-12" fill="none" stroke="#a0b68a" stroke-width="1.5"/>
+<path d="M152 154v-20m0 8q-14-2-13-14 13-1 13 14m0 4q13-1 15-13-13-1-15 13" fill="#91a779" stroke="#91a779" stroke-width="1.3"/>
+<path d="M15 158q25-5 45-4m82 6l23 1" fill="none" stroke="#63835b" stroke-width="1.5" stroke-linecap="round"/>
+<circle cx="69" cy="44" r="1.6" fill="#a7bf99"/><path d="M159 62v6m-3-3h6" stroke="#9cb491" stroke-width="1.2"/>
+</svg>"""
+
+HOME_MARK = '<svg viewBox="0 0 28 30" fill="none" aria-hidden="true"><path d="M4 13L14 4l10 9v12a1 1 0 01-1 1H5a1 1 0 01-1-1V13z" stroke="#f7f8ef" stroke-width="1.8" stroke-linejoin="round"/><path d="M11 26v-8a3 3 0 016 0v8" stroke="#f7f8ef" stroke-width="1.8"/><circle cx="14" cy="11" r="1.5" fill="#e8cc91"/></svg>'
+GIFT_MARK = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 11h16v9H4zM3 7h18v4H3zM12 7v13" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 7C6 8 5 3 8 3c2 0 4 4 4 4s2-4 4-4c3 0 2 5-4 4z" stroke="currentColor" stroke-width="1.5"/></svg>'
+LEAF_MARK = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 4C8 2 3 8 6 15s15 4 13-11zM5 20L16 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 
 def setting(name: str, default: str = "") -> str:
@@ -362,14 +437,24 @@ def section(title: str, note: str = ""):
     html(f'<div class="sectionline"><strong>{escape(title)}</strong><span>{escape(note)}</span></div>')
 
 
+def page_heading(title: str, note: str):
+    html(f'<div class="page-heading" lang="ko"><h1>{escape(title)}</h1><p>{escape(note)}</p></div>')
+
+
+def view_tabs(label: str, options: list[str], **kwargs):
+    with st.container(key="view_tabs"):
+        return st.radio(label, options, horizontal=True, label_visibility="collapsed", **kwargs)
+
+
 def empty(message: str):
-    html(f'<div class="empty">{escape(message)}</div>')
+    html(f'<div class="empty"><span class="empty-mark">{LEAF_MARK}</span>{escape(message)}</div>')
 
 
 def card(title: str, meta: str, badge="", reward=""):
-    html('<div class="note-card">' + (f'<div class="pill" style="margin-bottom:10px">{escape(badge)}</div>' if badge else "")
+    badge_style = " amber" if badge == STATUSES["submitted"] else " neutral" if badge == STATUSES["open"] else ""
+    html('<div class="note-card">' + (f'<div class="card-top"><span class="pill{badge_style}">{escape(badge)}</span></div>' if badge else "")
          + f'<div class="title">{escape(title)}</div><div class="meta">{escape(meta)}</div>'
-         + (f'<div class="reward">작은 보상　{escape(reward)}</div>' if reward else "") + '</div>')
+         + (f'<div class="reward">{GIFT_MARK}<div><span class="reward-label">작은 보상</span>{escape(reward)}</div></div>' if reward else "") + '</div>')
 
 
 def go(page: str):
@@ -401,18 +486,19 @@ def today_page(actor: str):
     count = sum(entries.get(n, {}).get("meal") == "먹어요" for n in DATA["members"])
     pending = sum(entries.get(n, {}).get("meal", "아직 몰라요") == "아직 몰라요" for n in DATA["members"])
     note = f'{pending}명은 아직 미정이에요.' if pending else '모두의 저녁 소식이 도착했어요.'
-    html(f'<div class="hero"><div class="hero-label">오늘 저녁, 우리집 식탁</div><div class="hero-title">{count}명이 함께 먹어요.</div><div class="hero-note">{note}</div>' + ILLUSTRATION + '</div>')
-    mode = st.radio("오늘 보기", ["내 소식", "가족 소식", "다가오는 일정"], horizontal=True, label_visibility="collapsed")
+    html(f'<div class="hero" lang="ko"><div class="hero-label">오늘 저녁, 우리집 식탁</div><h1 class="hero-title">{count}명이 함께 먹어요.</h1><div class="hero-note">{note}</div>' + ILLUSTRATION + '</div>')
+    mode = view_tabs("오늘 보기", ["내 소식", "가족 소식", "다가오는 일정"])
     if mode == "내 소식":
         current = entries.get(actor, {})
         with st.form(f"meal_{actor}_{TODAY}"):
-            meal = st.radio("오늘 저녁은요?", MEALS, index=MEALS.index(current.get("meal", MEALS[0])), horizontal=True)
+            with st.container(key="meal_choices"):
+                meal = st.radio("오늘 저녁은요?", MEALS, index=MEALS.index(current.get("meal", MEALS[0])), horizontal=True)
             options = arrival_options()
             arrival = st.selectbox("언제 집에 오나요?", options, index=options.index(current.get("arrival", "미정")), format_func=clock)
-            if st.form_submit_button("내 소식 저장", type="primary", use_container_width=True):
+            if st.form_submit_button("내 소식 저장", icon=":material/check:", type="primary", use_container_width=True):
                 DATA["days"].setdefault(TODAY.isoformat(), {})[actor] = {"meal": meal, "arrival": arrival}
                 save("가족에게 내 저녁 소식을 전했어요.")
-        st.caption("가족의 소식은 ‘가족 소식’에서 넘겨 볼 수 있어요.")
+        st.caption("남긴 소식은 우리 가족이 함께 볼 수 있어요.")
     elif mode == "가족 소식":
         n = pager(DATA["members"], "today_family")
         e = entries.get(n, {})
@@ -456,16 +542,16 @@ def task_editor(actor: str, original=None):
 
 
 def tasks_page(actor: str):
-    st.title("작은 부탁, 같이 해요.")
+    page_heading("작은 부탁, 같이 해요.", "혼자보다 함께하면 가벼워지는 일들.")
     editor = st.session_state.get("editor", "")
     original = next((t for t in DATA["tasks"] if t["id"] == editor and t["created"] == actor and t["status"] == "open"), None)
     if editor == "new_task" or original:
         task_editor(actor, original)
         return
-    if st.button("＋ 새로운 부탁", type="primary"):
+    if st.button("새로운 부탁", icon=":material/add:", type="primary", use_container_width=True):
         st.session_state.editor = "new_task"
         st.rerun()
-    category = st.radio("부탁 목록", ["진행 중", "확인 대기", "완료"], horizontal=True, label_visibility="collapsed")
+    category = view_tabs("부탁 목록", ["진행 중", "확인 대기", "완료"])
     only_mine = st.checkbox("내가 부탁하거나 맡은 일만 보기")
     tasks = [t for t in reversed(DATA["tasks"]) if (t["status"] in ("open", "claimed") if category == "진행 중" else t["status"] == "submitted" if category == "확인 대기" else t["status"] == "approved") and (not only_mine or actor in (t["owner"], t["created"]))]
     if not tasks:
@@ -483,10 +569,10 @@ def tasks_page(actor: str):
                         save("부탁을 맡았어요. 고마워요!")
                 else:
                     a, b = st.columns(2)
-                    if a.button("내용 수정", key="edit_" + t["id"]):
+                    if a.button("내용 수정", key="edit_" + t["id"], use_container_width=True):
                         st.session_state.editor = t["id"]
                         st.rerun()
-                    if b.button("부탁 삭제", key="delete_" + t["id"]):
+                    if b.button("부탁 삭제", key="delete_" + t["id"], use_container_width=True):
                         st.session_state.confirm_task = t["id"]
                     if st.session_state.get("confirm_task") == t["id"]:
                         agree = st.checkbox("이 부탁을 삭제할게요", key="agree_" + t["id"])
@@ -496,18 +582,18 @@ def tasks_page(actor: str):
                             save("부탁을 삭제했어요.")
             elif t["status"] == "claimed" and t["owner"] == actor:
                 a, b = st.columns(2)
-                if a.button("완료했어요", key="submit_" + t["id"], type="primary"):
+                if a.button("완료했어요", key="submit_" + t["id"], type="primary", use_container_width=True):
                     t["status"] = "submitted"
                     save("완료 소식을 보냈어요. 부탁한 가족의 확인을 기다려 주세요.")
-                if b.button("맡기 취소", key="unclaim_" + t["id"]):
+                if b.button("맡기 취소", key="unclaim_" + t["id"], use_container_width=True):
                     t.update(owner="", status="open")
                     save("다른 가족이 맡을 수 있게 했어요.")
             elif t["status"] == "submitted" and t["created"] == actor:
                 a, b = st.columns(2)
-                if a.button("고마워요, 완료 승인", key="approve_" + t["id"], type="primary"):
+                if a.button("고마워요, 완료 승인", key="approve_" + t["id"], type="primary", use_container_width=True):
                     t.update(status="approved", done=True)
                     save("부탁이 완료됐어요.")
-                if b.button("다시 부탁하기", key="return_" + t["id"]):
+                if b.button("다시 부탁하기", key="return_" + t["id"], use_container_width=True):
                     t["status"] = "claimed"
                     save("담당 가족에게 다시 부탁했어요.")
             elif t["status"] == "approved" and prize:
@@ -524,18 +610,17 @@ def event_editor(chosen: date, original=None):
         st.session_state.event_draft_id = token
         st.session_state.event_step = 1
         st.session_state.event_draft = {"title": original["title"] if original else "", "date": original["date"] if original else chosen.isoformat(),
-            "who": original["who"] if original else "가족 모두", "time": original["time"] if original else "",
-            "prep": "\n".join(i["text"] for i in original["items"]) if original else ""}
+            "who": original["who"] if original else "가족 모두", "time": original["time"] if original else ""}
     draft = st.session_state.event_draft
     step = st.session_state.event_step
-    st.caption(f"{step} / 2단계 · {'일정 정보' if step == 1 else '장소와 준비물'}")
+    html(f'<div class="editor-progress"><span class="step {"active" if step == 1 else ""}">1</span><span class="step-line"></span><span class="step {"active" if step == 2 else ""}">2</span><span>{"일정 정보" if step == 1 else "시간과 장소"}</span></div>')
     if step == 1:
         with st.form("event_basics"):
             title = st.text_input("일정 이름 *", value=draft["title"], max_chars=70, placeholder="예: 함께하는 주말 피크닉")
             when = st.date_input("날짜", value=date.fromisoformat(draft["date"]))
             people = ["가족 모두"] + DATA["members"]
             who = st.selectbox("함께하는 가족", people, index=people.index(draft["who"]))
-            if st.form_submit_button("다음 · 장소와 준비물", type="primary", use_container_width=True):
+            if st.form_submit_button("다음 · 시간과 장소", type="primary", use_container_width=True):
                 if not title.strip():
                     st.error("일정 이름을 적어 주세요.")
                 else:
@@ -545,30 +630,24 @@ def event_editor(chosen: date, original=None):
     else:
         with st.form("event_details"):
             place = st.text_input("시간 · 장소", value=draft["time"], max_chars=100, placeholder="예: 오전 11시 · 동네 공원")
-            prep = st.text_area("준비물 (한 줄에 하나씩)", value=draft["prep"], max_chars=2000, height=100, placeholder="예: 돗자리\n도시락")
             previous = st.form_submit_button("이전 · 일정 정보", use_container_width=True)
             submit = st.form_submit_button("일정 수정" if original else "일정 등록", type="primary", use_container_width=True)
         if previous:
-            draft.update(time=place.strip(), prep=prep)
+            draft.update(time=place.strip())
             st.session_state.event_step = 1
             st.rerun()
         if submit:
-            labels = [s.strip() for s in prep.splitlines() if s.strip()]
-            if len(labels) > 50 or any(len(s) > 100 for s in labels):
-                st.error("준비물은 50개까지, 각각 100자 이내로 적어 주세요.")
+            # Preserve legacy preparation records in backups without exposing a preparation UI.
+            values = {"title": draft["title"], "date": draft["date"], "who": draft["who"], "time": place.strip()}
+            if original:
+                original.update(values)
             else:
-                old_checks = {i["text"]: i["done"] for i in original["items"]} if original else {}
-                values = {"title": draft["title"], "date": draft["date"], "who": draft["who"], "time": place.strip(),
-                    "items": [{"text": s, "done": old_checks.get(s, False)} for s in dict.fromkeys(labels)]}
-                if original:
-                    original.update(values)
-                else:
-                    DATA["events"].append({"id": new_id(), **values})
-                when = date.fromisoformat(draft["date"])
-                st.session_state.update(selected_day=when.isoformat(), month=when.replace(day=1).isoformat(), calendar_mode="선택일 일정")
-                st.session_state.pop("editor", None)
-                st.session_state.pop("event_draft_id", None)
-                save("가족 일정을 저장했어요.")
+                DATA["events"].append({"id": new_id(), **values, "items": []})
+            when = date.fromisoformat(draft["date"])
+            st.session_state.update(selected_day=when.isoformat(), month=when.replace(day=1).isoformat(), calendar_mode="선택일 일정")
+            st.session_state.pop("editor", None)
+            st.session_state.pop("event_draft_id", None)
+            save("가족 일정을 저장했어요.")
     if st.button("캘린더로 돌아가기"):
         st.session_state.pop("editor", None)
         st.session_state.pop("event_draft_id", None)
@@ -576,7 +655,7 @@ def event_editor(chosen: date, original=None):
 
 
 def calendar_page():
-    st.title("우리집 캘린더")
+    page_heading("우리집 캘린더", "같이 보내고 싶은 날을 모아두어요.")
     st.session_state.setdefault("month", TODAY.replace(day=1).isoformat())
     st.session_state.setdefault("selected_day", TODAY.isoformat())
     cursor = date.fromisoformat(st.session_state.month)
@@ -588,13 +667,17 @@ def calendar_page():
         return
     if st.session_state.pop("calendar_jump", False):
         st.session_state.calendar_mode = "선택일 일정"
-    mode = st.radio("일정 보기", ["달력", "선택일 일정"], horizontal=True, label_visibility="collapsed", key="calendar_mode")
+    mode = view_tabs("일정 보기", ["달력", "선택일 일정"], key="calendar_mode")
     if mode == "달력":
         with st.container(key="monthnav"):
-            a, b, c = st.columns([1.1, 3, 1.1])
+            a, b, c, d = st.columns([1.2, 2.9, 1.2, .9])
             previous = a.button("이전 달", use_container_width=True, disabled=cursor.year <= 1900 and cursor.month == 1)
             b.markdown(f'<div class="calendar-title">{cursor.year}년 {cursor.month}월</div>', unsafe_allow_html=True)
             following = c.button("다음 달", use_container_width=True, disabled=cursor.year >= 2200 and cursor.month == 12)
+            back_to_today = d.button("오늘", use_container_width=True, help="이번 달의 오늘로 이동해요.")
+        if back_to_today:
+            st.session_state.update(month=TODAY.replace(day=1).isoformat(), selected_day=TODAY.isoformat())
+            st.rerun()
         if previous or following:
             n = cursor.year * 12 + cursor.month - 1 + (1 if following else -1)
             target = date(n // 12, n % 12 + 1, 1)
@@ -616,12 +699,9 @@ def calendar_page():
                         st.session_state.calendar_jump = True
                         st.rerun()
         st.caption("날짜를 누르면 그날의 일정을 볼 수 있어요. · 일정 있음")
-        if st.button("오늘로 이동"):
-            st.session_state.update(month=TODAY.replace(day=1).isoformat(), selected_day=TODAY.isoformat())
-            st.rerun()
     else:
         section(f"{chosen.month}월 {chosen.day}일 ({WEEKDAYS[chosen.weekday()]})")
-        if st.button("＋ 이 날의 일정 추가", type="primary", use_container_width=True):
+        if st.button("이 날의 일정 추가", icon=":material/add:", type="primary", use_container_width=True):
             st.session_state.editor = "new_event"
             st.rerun()
         events = [e for e in DATA["events"] if e["date"] == chosen.isoformat()]
@@ -630,21 +710,14 @@ def calendar_page():
         e = pager(events, "event_page_" + chosen.isoformat())
         if e:
             card(e["title"], f'{e["who"]} · {e["time"] or "시간·장소 미정"}')
-            item_index = pager(list(range(len(e["items"]))), "prep_page_" + e["id"])
-            if item_index is not None:
-                item = e["items"][item_index]
-                done = st.checkbox("준비물 · " + item["text"], value=item["done"], key=f'prep_{e["id"]}_{item_index}_{item["done"]}')
-                if done != item["done"]:
-                    item["done"] = done
-                    save("준비물 상태를 저장했어요.")
             a, b = st.columns(2)
-            if a.button("일정 수정", key="event_edit_" + e["id"]):
+            if a.button("일정 수정", key="event_edit_" + e["id"], use_container_width=True):
                 st.session_state.editor = e["id"]
                 st.rerun()
-            if b.button("일정 삭제", key="event_delete_" + e["id"]):
+            if b.button("일정 삭제", key="event_delete_" + e["id"], use_container_width=True):
                 st.session_state.confirm_event = e["id"]
             if st.session_state.get("confirm_event") == e["id"]:
-                agree = st.checkbox("이 일정과 준비물을 삭제할게요", key="event_agree_" + e["id"])
+                agree = st.checkbox("이 일정을 삭제할게요", key="event_agree_" + e["id"])
                 if st.button("일정 삭제하기", key="event_yes_" + e["id"], disabled=not agree):
                     DATA["events"] = [v for v in DATA["events"] if v["id"] != e["id"]]
                     st.session_state.pop("confirm_event", None)
@@ -652,8 +725,9 @@ def calendar_page():
 
 
 def settings_page():
-    st.title("우리집을 가꿔요.")
-    mode = st.radio("설정 메뉴", ["가족", "백업", "복원", "안내"], horizontal=True, label_visibility="collapsed")
+    if DATA["members"]:
+        page_heading("우리집을 가꿔요.", "함께하는 가족과 소중한 기록을 챙겨요.")
+    mode = view_tabs("설정 메뉴", ["가족", "백업", "복원", "안내"])
     if mode == "가족":
         section("함께하는 가족", f"{len(DATA['members'])} / 30명")
         n = pager(DATA["members"], "settings_family")
@@ -736,7 +810,7 @@ def gate():
 
 def main():
     global DATA, REVISION
-    html(CSS)
+    st.html(CSS)
     gate()
     try:
         DATA, REVISION = load()
@@ -744,30 +818,33 @@ def main():
         st.error("우리집 기록을 읽지 못했어요. 원본 저장 파일을 보관한 뒤 저장 공간과 백업 형식을 확인해 주세요. 기록은 자동으로 초기화하지 않았어요.")
         st.stop()
     date_label = f"{TODAY.month}월 {TODAY.day}일 {WEEKDAYS[TODAY.weekday()]}요일"
-    if st.session_state.get("demo"):
-        date_label = "예시 체험 · " + date_label
-    html(f'<div class="masthead"><div class="brand"><span class="brand-mark">⌂</span>우리집</div><div class="dateline">{date_label}</div></div>')
+    demo_tag = '<span class="demo-tag">예시 체험</span>' if st.session_state.get("demo") else ""
+    brand = f'<div class="brand"><span class="brand-mark">{HOME_MARK}</span><div><div class="brand-word">우리집{demo_tag}</div><div class="dateline">{date_label}</div></div></div>'
+    actor = ""
+    with st.container(key="app_header"):
+        if DATA["members"]:
+            if st.session_state.get("actor") not in DATA["members"]:
+                st.session_state.actor = DATA["members"][0]
+            a, b = st.columns([1.6, 1])
+            a.markdown(brand, unsafe_allow_html=True)
+            actor = b.selectbox("지금 사용하는 가족", DATA["members"], key="actor", on_change=lambda: st.session_state.pop("editor", None))
+        else:
+            html(brand)
     if st.session_state.get("flash"):
         st.toast(st.session_state.pop("flash"), icon="✅")
     st.session_state.setdefault("page", "오늘")
     with st.container(key="navigation"):
         for col, page in zip(st.columns(4), ["오늘", "부탁", "일정", "설정"]):
-            label = {"오늘": "⌂ 오늘", "부탁": "♡ 부탁", "일정": "▦ 일정", "설정": "⚙ 설정"}[page]
-            if col.button(label, type="primary" if st.session_state.page == page else "secondary", use_container_width=True):
+            icon = {"오늘": "cottage", "부탁": "favorite", "일정": "calendar_month", "설정": "tune"}[page]
+            if col.button(page, key="nav_" + page, icon=f":material/{icon}:", type="primary" if st.session_state.page == page else "secondary", use_container_width=True):
                 go(page)
     if not DATA["members"]:
-        html('<div class="hero"><div class="hero-label">우리 가족만의 작은 공간</div><div class="hero-title">함께 챙기는 하루.</div><div class="hero-note">저녁 소식, 부탁, 가족 일정을 한곳에 모아요.</div>' + ILLUSTRATION + '</div>')
+        html('<div class="hero" lang="ko"><div class="hero-label">우리 가족만의 작은 공간</div><h1 class="hero-title">함께 챙기는 하루.</h1><div class="hero-note">저녁 소식, 부탁, 가족 일정을 한곳에 모아요.</div>' + ILLUSTRATION + '</div>')
         if st.button("예시로 먼저 둘러보기"):
             st.session_state.update(demo=True, demo_data=demo_data(), demo_revision=0, page="오늘")
             st.rerun()
         settings_page()
     else:
-        if st.session_state.get("actor") not in DATA["members"]:
-            st.session_state.actor = DATA["members"][0]
-        with st.container(key="profile"):
-            a, b = st.columns([1.2, 1])
-            a.markdown('<div class="profile-label">지금 사용하는 가족</div>', unsafe_allow_html=True)
-            actor = b.selectbox("지금 사용하는 가족", DATA["members"], key="actor", label_visibility="collapsed", on_change=lambda: st.session_state.pop("editor", None))
         page = st.session_state.page
         if page == "오늘":
             today_page(actor)
